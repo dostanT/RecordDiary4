@@ -33,19 +33,19 @@ class SettingsViewModel: ObservableObject{
     //Они видны на экране. И при нажатии на них будет создоватся новые RecordDataModel
     @Published var emotionInUse: [EmotionModel] = [
         EmotionModel(
-            isShown: true, name: "Sad",
+            isShown: true, name: "Sad1",
             iconName: "house.fill",
             color: ColorTheme.blue),
         EmotionModel(
-            isShown: true, name: "Sad",
+            isShown: true, name: "Sad2",
             iconName: "house.fill",
             color: ColorTheme.green),
         EmotionModel(
-            isShown: true, name: "Sad",
+            isShown: true, name: "Sad3",
             iconName: "house.fill",
             color: ColorTheme.red),
         EmotionModel(
-            isShown: true, name: "Sad",
+            isShown: true, name: "Sad4",
             iconName: "house.fill",
             color: ColorTheme.cyan),
     ]

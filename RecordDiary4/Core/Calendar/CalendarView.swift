@@ -13,6 +13,8 @@ struct CalendarView: View {
     @EnvironmentObject private var settingsVM: SettingsViewModel
     @StateObject private var calendarVM = CalendarViewModel()
     @Binding var selectedDate: Date
+    @State private var selectedEmotion: EmotionModel? = nil
+    @Namespace private var namespace
     
     
     var body: some View {
@@ -20,6 +22,8 @@ struct CalendarView: View {
             monthNavigationView
             
             calendarGridView
+            
+            selectedView
             
             recordsListView
             
@@ -39,6 +43,57 @@ struct CalendarView: View {
         }
         .onReceive(NotificationCenter.default.publisher(for: .playbackFinished)) { _ in
             settingsVM.selectedRecord = nil
+        }
+    }
+    
+    private var selectedView: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 20) {
+                VStack{
+                    Text("All")
+                        .foregroundColor(selectedEmotion == nil ? ColorTheme.blue.color : ColorTheme.black.color)
+                    
+                    if selectedEmotion == nil {
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(ColorTheme.red.color)
+                            .matchedGeometryEffect(id: "category_background", in: namespace)
+                            .frame(width: 35, height: 2)
+                            .offset(y: 4)
+                    } else {
+                        Color.clear.frame(height: 2)
+                    }
+                }
+                .onTapGesture {
+                    withAnimation(.spring()) {
+                        selectedEmotion = nil
+                    }
+                    calendarVM.filterRecordsWithEmotion(records: settingsVM.data, emotion: nil)
+                }
+                ForEach(settingsVM.emotionInUse) { emotion in
+                    VStack {
+                        Text(emotion.name)
+                            .foregroundColor(selectedEmotion?.name == emotion.name ? emotion.color.color : ColorTheme.black.color)
+
+                        if selectedEmotion?.name == emotion.name {
+                            RoundedRectangle(cornerRadius: 10)
+                                .fill(emotion.color.color)
+                                .matchedGeometryEffect(id: "category_background", in: namespace)
+                                .frame(width: 35, height: 2)
+                                .offset(y: 4)
+                        } else {
+                            Color.clear.frame(height: 2)
+                        }
+                    }
+                    .onTapGesture {
+                        withAnimation(.spring()) {
+                            selectedEmotion = emotion
+                        }
+                        calendarVM.filterRecordsWithEmotion(records: settingsVM.data, emotion: emotion)
+                    }
+                }
+            }
+            .padding(.horizontal)
+            .frame(height: 55)
         }
     }
     
@@ -87,7 +142,6 @@ struct CalendarView: View {
                         calendarDate: calendarDate,
                         records: calendarVM.getPointFromRecords(data: settingsVM.data, selectedDate: calendarDate.date),
                         isSelected: Calendar.current.isDate(calendarDate.date, inSameDayAs: selectedDate),
-//                        settingsManager: settingsManager
                     ) {
                         selectedDate = calendarDate.date
                     }
@@ -99,56 +153,79 @@ struct CalendarView: View {
     
     private var recordsListView: some View {
         List{
-            ForEach(settingsVM.data) { record in
-                if selectedDate.getFormattedYearMonthDay() == record.createdDate.getFormattedYearMonthDay() {
-                    HStack{
-                        VStack(alignment: .leading){
-                            Text(record.createdDate.getFormattedHourMinutesAMPM())
-                            if let emotion = record.emotion {
-                                Text(emotion.name)
-                            }
-                            
+            if let _ = selectedEmotion {
+                ForEach(calendarVM.shownRecordsAfterFiltering) { record in
+                    recordsView(record: record)
+                }
+            } else {
+                ForEach(settingsVM.data) { record in
+                    recordsView(record: record)
+                }
+            }
+            
+        }
+        .listStyle(PlainListStyle())
+    }
+    
+    private func recordsView(record: RecordDataModel) -> (some View) {
+        ZStack{
+            if selectedDate.getFormattedYearMonthDay() == record.createdDate.getFormattedYearMonthDay() {
+                HStack{
+                    VStack(alignment: .leading){
+                        Text(record.createdDate.getFormattedHourMinutesAMPM())
+                        if let emotion = record.emotion {
+                            Text(emotion.name)
                         }
-                        .padding(.leading)
-                        Spacer()
-                        VStack{
-                            Button {
-                                if let selectedRecord = settingsVM.selectedRecord {
-                                    if selectedRecord.url == record.url {
-                                        settingsVM.audioInputOutputService.stopPlayback()
-                                        settingsVM.selectedRecord = nil
-                                    } else {
-                                        settingsVM.changeAudioPlaying(chosenRecord: record)
-                                    }
-                                }
-                                else {
-                                    settingsVM.audioInputOutputService.playRecording(url: record.url) { success in
-                                        if success {
-                                            settingsVM.selectedRecord = record
-                                        }
-                                    }
-                                }
-                            } label: {
-                                if let selectedRecord = settingsVM.selectedRecord  {
-                                    Image(systemName: selectedRecord.url == record.url ? "stop.fill" : "play.fill")
-                                        .font(.title2)
-                                } else {
-                                    Image(systemName: "play.fill")
-                                        .font(.title2)
-                                }
-                                
-                            }
-                            
-                        }
-                        .padding(.trailing)
                         
                     }
-                    .frame(height: 55)
-                    .background(record.emotion?.color.color ?? Color(#colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)))
-                    .clipShape(RoundedRectangle(cornerRadius: 16))
+                    .padding(.leading)
+                    Spacer()
+                    VStack{
+                        Button {
+                            if let selectedRecord = settingsVM.selectedRecord {
+                                if selectedRecord.url == record.url {
+                                    settingsVM.audioInputOutputService.stopPlayback()
+                                    settingsVM.selectedRecord = nil
+                                } else {
+                                    settingsVM.changeAudioPlaying(chosenRecord: record)
+                                }
+                            }
+                            else {
+                                settingsVM.audioInputOutputService.playRecording(url: record.url) { success in
+                                    if success {
+                                        settingsVM.selectedRecord = record
+                                    }
+                                }
+                            }
+                        } label: {
+                            if let selectedRecord = settingsVM.selectedRecord  {
+                                Image(systemName: selectedRecord.url == record.url ? "stop.fill" : "play.fill")
+                                    .font(.title2)
+                            } else {
+                                Image(systemName: "play.fill")
+                                    .font(.title2)
+                            }
+                            
+                        }
+                        
+                    }
+                    .padding(.trailing)
+                    
+                }
+                .frame(height: 55)
+                .background(record.emotion?.color.color ?? Color(#colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)))
+                .clipShape(RoundedRectangle(cornerRadius: 16))
+            }
+        }
+    }
+    
+    private func showRecordsWithSpecificEmotion(record: RecordDataModel, emotion: EmotionModel) -> (some View) {
+        ZStack{
+            if let currentEmotion = record.emotion {
+                if currentEmotion.name == emotion.name {
+                    recordsView(record: record)
                 }
             }
         }
-        .listStyle(PlainListStyle())
     }
 }

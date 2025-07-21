@@ -11,6 +11,28 @@ class CalendarViewModel: ObservableObject {
     @Published var selectedDate: Date = Date()
     @Published var currentMonth: Date = Date()
     
+    @Published var shownRecordsAfterFiltering: [RecordDataModel] = []
+    
+    func filterRecordsWithEmotion(records: [RecordDataModel], emotion: EmotionModel?) {
+        var newArr: [RecordDataModel] = []
+        
+        guard let emotion = emotion else {
+            shownRecordsAfterFiltering = records
+            return
+        }
+        for record in records {
+            guard let recordEmotion = record.emotion else {
+                print("❌Error Filtering: filterRecordsWithEmotion()")
+                return
+            }
+            
+            if recordEmotion.name == emotion.name {
+                newArr.append(record)
+            }
+        }
+        shownRecordsAfterFiltering = newArr
+    }
+    
     func getDaysInMonth() -> [CalendarDate] {
         let calendar = Calendar.current
         let startOfMonth = calendar.dateInterval(of: .month, for: currentMonth)?.start ?? currentMonth
