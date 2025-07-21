@@ -6,13 +6,30 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		B9F8650A2E2CF67900B0F629 /* SwiftfulRouting in Frameworks */ = {isa = PBXBuildFile; productRef = B9F865092E2CF67900B0F629 /* SwiftfulRouting */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		B9F864FA2E2CF63800B0F629 /* RecordDiary4.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RecordDiary4.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		B9F8653A2E2CF6AA00B0F629 /* Exceptions for "RecordDiary4" folder in "RecordDiary4" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = B9F864F92E2CF63800B0F629 /* RecordDiary4 */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		B9F864FC2E2CF63800B0F629 /* RecordDiary4 */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				B9F8653A2E2CF6AA00B0F629 /* Exceptions for "RecordDiary4" folder in "RecordDiary4" target */,
+			);
 			path = RecordDiary4;
 			sourceTree = "<group>";
 		};
@@ -23,6 +40,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B9F8650A2E2CF67900B0F629 /* SwiftfulRouting in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +83,7 @@
 			);
 			name = RecordDiary4;
 			packageProductDependencies = (
+				B9F865092E2CF67900B0F629 /* SwiftfulRouting */,
 			);
 			productName = RecordDiary4;
 			productReference = B9F864FA2E2CF63800B0F629 /* RecordDiary4.app */;
@@ -94,6 +113,9 @@
 			);
 			mainGroup = B9F864F12E2CF63800B0F629;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				B9F865082E2CF67900B0F629 /* XCRemoteSwiftPackageReference "SwiftfulRouting" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = B9F864FB2E2CF63800B0F629 /* Products */;
 			projectDirPath = "";
@@ -256,6 +278,7 @@
 				DEVELOPMENT_TEAM = LGDK2TXW59;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = RecordDiary4/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -284,6 +307,7 @@
 				DEVELOPMENT_TEAM = LGDK2TXW59;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = RecordDiary4/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -324,6 +348,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		B9F865082E2CF67900B0F629 /* XCRemoteSwiftPackageReference "SwiftfulRouting" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SwiftfulThinking/SwiftfulRouting.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.1.3;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		B9F865092E2CF67900B0F629 /* SwiftfulRouting */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B9F865082E2CF67900B0F629 /* XCRemoteSwiftPackageReference "SwiftfulRouting" */;
+			productName = SwiftfulRouting;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = B9F864F22E2CF63800B0F629 /* Project object */;
 }
