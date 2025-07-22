@@ -57,6 +57,7 @@ struct RecordingEmotionView: View {
                         Spacer()
                     }
                 }
+                .padding()
                 Spacer()
                 HStack(alignment: .bottom){
                     VStack{
@@ -65,8 +66,9 @@ struct RecordingEmotionView: View {
                             .font(.title3)
                     }
                 }
+                .padding()
             }
-            .padding()
+            .frame(width: 150, height: 150)
             .background(emotionModel.color.color)
             .clipShape(RoundedRectangle(cornerRadius: 30))
         }
