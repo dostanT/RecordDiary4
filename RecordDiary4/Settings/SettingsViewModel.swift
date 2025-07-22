@@ -90,9 +90,9 @@ class SettingsViewModel: ObservableObject{
         audioInputOutputService.startRecording(emotion: selectedEmotion)
     }
     
-    func stopRecording() {
+    func stopRecording(showDate: Date) {
         isRecording = false
-        guard let record = audioInputOutputService.stopRecording() else {return}
+        guard let record = audioInputOutputService.stopRecording(shownDate: showDate) else {return}
         data.append(record)
         selectedEmotion = nil
     }
@@ -123,5 +123,6 @@ class SettingsViewModel: ObservableObject{
     func deleteAll() {
         audioInputOutputService.deleteAllRecordings(data: data)
         coreDataService.deleteAllRecordsFromCoreData()
+        data = []
     }
 }

@@ -13,24 +13,37 @@ class CalendarViewModel: ObservableObject {
     
     @Published var shownRecordsAfterFiltering: [RecordDataModel] = []
     
-    func filterRecordsWithEmotion(records: [RecordDataModel], emotion: EmotionModel?) {
+    func filterRecordsWithEmotion(records: [RecordDataModel], emotion: EmotionModel?, shownDate: Date) {
         var newArr: [RecordDataModel] = []
         
         guard let emotion = emotion else {
-            shownRecordsAfterFiltering = records
+            for record in records {
+                if let shownDayRec = record.shownDay {
+                    if shownDayRec.getFormattedYearMonthDay() == shownDate.getFormattedYearMonthDay() {
+                        newArr.append(record)
+                    }
+                }
+                shownRecordsAfterFiltering = newArr
+            }
             return
         }
         for record in records {
             guard let recordEmotion = record.emotion else {
                 print("❌Error Filtering: filterRecordsWithEmotion()")
+                shownRecordsAfterFiltering = []
                 return
             }
             
             if recordEmotion.name == emotion.name {
-                newArr.append(record)
+                if let shownDayRec = record.shownDay {
+                    if shownDayRec.getFormattedYearMonthDay() == shownDate.getFormattedYearMonthDay() {
+                        newArr.append(record)
+                    }
+                }
             }
         }
         shownRecordsAfterFiltering = newArr
+        return
     }
     
     func getDaysInMonth() -> [CalendarDate] {
@@ -87,8 +100,10 @@ class CalendarViewModel: ObservableObject {
         //Можно будет сделать так что бы выбирала только те цвета которые больше всех
         var newData: [RecordDataModel] = []
         for record in data {
-            if Calendar.current.isDate(selectedDate, inSameDayAs: record.createdDate) {
-                newData.append(record)
+            if let shownDay = record.shownDay {
+                if Calendar.current.isDate(selectedDate, inSameDayAs: shownDay) {
+                    newData.append(record)
+                }
             }
         }
         return newData

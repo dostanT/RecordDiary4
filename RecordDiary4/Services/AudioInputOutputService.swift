@@ -49,7 +49,7 @@ class AudioInputOutputService: NSObject, ObservableObject, AVAudioRecorderDelega
         }
     }
 
-    func stopRecording() -> RecordDataModel? {
+    func stopRecording(shownDate: Date) -> RecordDataModel? {
         guard let recorder = audioRecorder, let emotion = currentEmotion else { return nil }
 
         recorder.stop()
@@ -64,6 +64,7 @@ class AudioInputOutputService: NSObject, ObservableObject, AVAudioRecorderDelega
         let newRecording = RecordDataModel(
             url: url,
             createdDate: date,
+            shownDay: shownDate,
             emotion: emotion,
             nameIdentifier: filename
         )
@@ -167,6 +168,7 @@ class AudioInputOutputService: NSObject, ObservableObject, AVAudioRecorderDelega
                     id: UUID().uuidString,
                     url: url,
                     createdDate: date,
+                    shownDay: nil,
                     emotion: nil,
                     nameIdentifier: filename
                 )
@@ -195,6 +197,7 @@ class AudioInputOutputService: NSObject, ObservableObject, AVAudioRecorderDelega
                     id: existing.id,
                     url: record.url,
                     createdDate: existing.createdDate,
+                    shownDay: existing.shownDay,
                     emotion: existing.emotion,
                     nameIdentifier: existing.nameIdentifier)
                 newRecords.append(recordToUpdate)
@@ -205,6 +208,7 @@ class AudioInputOutputService: NSObject, ObservableObject, AVAudioRecorderDelega
                         id: record.id,
                         url: record.url,
                         createdDate: record.createdDate,
+                        shownDay: Date(),
                         emotion: emotion,
                         nameIdentifier: record.nameIdentifier
                     )

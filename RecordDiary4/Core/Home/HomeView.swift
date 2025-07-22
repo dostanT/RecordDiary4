@@ -11,7 +11,8 @@ import SwiftfulRouting
 struct HomeView: View {
     @Environment(\.router) var router
     @EnvironmentObject private var settingsVM: SettingsViewModel
-    @State private var selectedDate = Date()
+    @StateObject private var homeVM: HomeViewModel = HomeViewModel()
+    @State private var selectedDate: Date = Date()
     
     let columns: [GridItem] = [
         GridItem(.flexible(), spacing: 12, alignment: .trailing),
@@ -27,21 +28,6 @@ struct HomeView: View {
                 Text(selectedDate.getformattedWeekDay())
                     .font(.caption)
                 Spacer()
-                Button{
-                    settingsVM.stopRecording()
-                } label: {
-                    Circle()
-                        .frame(width: 54, height: 54)
-                }
-                .tint(.blue)
-                
-                Button{
-                    settingsVM.deleteAll()
-                } label: {
-                    Circle()
-                        .frame(width: 54, height: 54)
-                }
-                .tint(.red)
             }
             .padding()
             .onTapGesture {
@@ -59,9 +45,22 @@ struct HomeView: View {
                         RecordingEmotionView(emotionModel: emotion, isPremium: settingsVM.isPremium)
                             .opacity(settingsVM.selectedEmotion == nil ? 1 : settingsVM.selectedEmotion!.id == emotion.id ? 1 : 0.2)
                             .onTapGesture {
-                                if settingsVM.selectedEmotion == nil {
-                                    settingsVM.startRecording(selectedEmotion: emotion)
-                                }
+//                                if settingsVM.selectedEmotion == nil {
+//                                    settingsVM.startRecording(selectedEmotion: emotion)
+//                                } else {
+//                                    if settingsVM.selectedEmotion == emotion{
+//                                        settingsVM.stopRecording(showDate: selectedDate)
+//                                    }
+//                                }
+                                homeVM.stopRecording(
+                                    emotion1: settingsVM.selectedEmotion,
+                                    emotion2NONOptional: emotion) {
+                                        settingsVM.stopRecording(showDate: selectedDate)
+                                    } startRecording: {
+                                        settingsVM.startRecording(selectedEmotion: emotion)
+                                    }
+
+                                
                             }
                     }
             })

@@ -93,6 +93,7 @@ class CoreDateService {
                     id: recordEntity.id ?? UUID().uuidString,
                     url: url,
                     createdDate: recordEntity.createdDate ?? Date(),
+                    shownDay: recordEntity.shownDate ?? Date(),
                     emotion: emotion,
                     nameIdentifier: recordEntity.nameIdentefier ?? "")
             }
@@ -119,6 +120,7 @@ class CoreDateService {
         recordEntity.createdDate = record.createdDate
         recordEntity.emotion = emotion
         recordEntity.nameIdentefier = record.nameIdentifier
+        recordEntity.shownDate = record.shownDay
         
         do {
             try context.save()
@@ -146,6 +148,7 @@ class CoreDateService {
             recordEntity.createdDate = record.createdDate
             recordEntity.emotion = emotion
             recordEntity.nameIdentefier = record.nameIdentifier
+            recordEntity.shownDate = record.shownDay
         }
 
         do {

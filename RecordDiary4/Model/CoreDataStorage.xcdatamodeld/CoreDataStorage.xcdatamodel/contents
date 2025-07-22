@@ -12,6 +12,7 @@
         <attribute name="createdDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" optional="YES" attributeType="String"/>
         <attribute name="nameIdentefier" optional="YES" attributeType="String"/>
+        <attribute name="shownDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="url" optional="YES" attributeType="URI"/>
         <relationship name="emotion" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="EmotionEntity" inverseName="record" inverseEntity="EmotionEntity"/>
     </entity>

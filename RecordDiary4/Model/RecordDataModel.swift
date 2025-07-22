@@ -12,11 +12,12 @@ struct RecordDataModel: Identifiable {
     var id = UUID().uuidString
     let url: URL
     let createdDate: Date
+    let shownDay: Date?
     var emotion: EmotionModel?
     var nameIdentifier: String?
     
     static var defaultRecordDataModel: RecordDataModel {
-        RecordDataModel(url: URL(string: "nil")!, createdDate: Date())
+        RecordDataModel(url: URL(string: "nil")!, createdDate: Date(), shownDay: Date())
     }
 }
 struct Recording: Identifiable {

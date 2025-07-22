@@ -44,6 +44,9 @@ struct CalendarView: View {
         .onReceive(NotificationCenter.default.publisher(for: .playbackFinished)) { _ in
             settingsVM.selectedRecord = nil
         }
+        .onAppear {
+            calendarVM.filterRecordsWithEmotion(records: settingsVM.data, emotion: nil, shownDate: selectedDate)
+        }
     }
     
     private var selectedView: some View {
@@ -55,7 +58,7 @@ struct CalendarView: View {
                     
                     if selectedEmotion == nil {
                         RoundedRectangle(cornerRadius: 10)
-                            .fill(ColorTheme.red.color)
+                            .fill(ColorTheme.blue.color)
                             .matchedGeometryEffect(id: "category_background", in: namespace)
                             .frame(width: 35, height: 2)
                             .offset(y: 4)
@@ -67,7 +70,7 @@ struct CalendarView: View {
                     withAnimation(.spring()) {
                         selectedEmotion = nil
                     }
-                    calendarVM.filterRecordsWithEmotion(records: settingsVM.data, emotion: nil)
+                    calendarVM.filterRecordsWithEmotion(records: settingsVM.data, emotion: nil, shownDate: selectedDate)
                 }
                 ForEach(settingsVM.emotionInUse) { emotion in
                     VStack {
@@ -88,7 +91,7 @@ struct CalendarView: View {
                         withAnimation(.spring()) {
                             selectedEmotion = emotion
                         }
-                        calendarVM.filterRecordsWithEmotion(records: settingsVM.data, emotion: emotion)
+                        calendarVM.filterRecordsWithEmotion(records: settingsVM.data, emotion: emotion, shownDate: selectedDate)
                     }
                 }
             }
@@ -142,8 +145,16 @@ struct CalendarView: View {
                         calendarDate: calendarDate,
                         records: calendarVM.getPointFromRecords(data: settingsVM.data, selectedDate: calendarDate.date),
                         isSelected: Calendar.current.isDate(calendarDate.date, inSameDayAs: selectedDate),
-                    ) {
-                        selectedDate = calendarDate.date
+                    )
+                    .onTapGesture {
+                        if selectedDate == calendarDate.date {
+                            router.dismissScreen()
+                        } else {
+                            selectedDate = calendarDate.date
+                            calendarVM.filterRecordsWithEmotion(records: settingsVM.data, emotion: nil, shownDate: selectedDate)
+                            
+                        }
+                        
                     }
                 }
             }
@@ -152,70 +163,61 @@ struct CalendarView: View {
     }
     
     private var recordsListView: some View {
-        List{
-            if let _ = selectedEmotion {
-                ForEach(calendarVM.shownRecordsAfterFiltering) { record in
-                    recordsView(record: record)
-                }
-            } else {
-                ForEach(settingsVM.data) { record in
-                    recordsView(record: record)
-                }
+        ScrollView{
+            ForEach(calendarVM.shownRecordsAfterFiltering) { record in
+                recordsView(record: record)
             }
-            
         }
         .listStyle(PlainListStyle())
     }
     
     private func recordsView(record: RecordDataModel) -> (some View) {
         ZStack{
-            if selectedDate.getFormattedYearMonthDay() == record.createdDate.getFormattedYearMonthDay() {
-                HStack{
-                    VStack(alignment: .leading){
-                        Text(record.createdDate.getFormattedHourMinutesAMPM())
-                        if let emotion = record.emotion {
-                            Text(emotion.name)
-                        }
-                        
+            HStack{
+                VStack(alignment: .leading){
+                    Text(record.createdDate.getFormattedHourMinutesAMPM())
+                    if let emotion = record.emotion {
+                        Text(emotion.name)
                     }
-                    .padding(.leading)
-                    Spacer()
-                    VStack{
-                        Button {
-                            if let selectedRecord = settingsVM.selectedRecord {
-                                if selectedRecord.url == record.url {
-                                    settingsVM.audioInputOutputService.stopPlayback()
-                                    settingsVM.selectedRecord = nil
-                                } else {
-                                    settingsVM.changeAudioPlaying(chosenRecord: record)
-                                }
-                            }
-                            else {
-                                settingsVM.audioInputOutputService.playRecording(url: record.url) { success in
-                                    if success {
-                                        settingsVM.selectedRecord = record
-                                    }
-                                }
-                            }
-                        } label: {
-                            if let selectedRecord = settingsVM.selectedRecord  {
-                                Image(systemName: selectedRecord.url == record.url ? "stop.fill" : "play.fill")
-                                    .font(.title2)
-                            } else {
-                                Image(systemName: "play.fill")
-                                    .font(.title2)
-                            }
-                            
-                        }
-                        
-                    }
-                    .padding(.trailing)
                     
                 }
-                .frame(height: 55)
-                .background(record.emotion?.color.color ?? Color(#colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)))
-                .clipShape(RoundedRectangle(cornerRadius: 16))
+                .padding(.leading)
+                Spacer()
+                VStack{
+                    Button {
+                        if let selectedRecord = settingsVM.selectedRecord {
+                            if selectedRecord.url == record.url {
+                                settingsVM.audioInputOutputService.stopPlayback()
+                                settingsVM.selectedRecord = nil
+                            } else {
+                                settingsVM.changeAudioPlaying(chosenRecord: record)
+                            }
+                        }
+                        else {
+                            settingsVM.audioInputOutputService.playRecording(url: record.url) { success in
+                                if success {
+                                    settingsVM.selectedRecord = record
+                                }
+                            }
+                        }
+                    } label: {
+                        if let selectedRecord = settingsVM.selectedRecord  {
+                            Image(systemName: selectedRecord.url == record.url ? "stop.fill" : "play.fill")
+                                .font(.title2)
+                        } else {
+                            Image(systemName: "play.fill")
+                                .font(.title2)
+                        }
+                        
+                    }
+                    
+                }
+                .padding(.trailing)
+                
             }
+            .frame(height: 55)
+            .background(record.emotion?.color.color ?? Color(#colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)))
+            .clipShape(RoundedRectangle(cornerRadius: 16))
         }
     }
     

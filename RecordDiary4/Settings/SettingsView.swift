@@ -124,7 +124,7 @@ struct SettingsView: View {
 
                 Section {
                     Button{
-                        
+                        settingsVM.deleteAll()
                     } label: {
                         SettingsRow(
                             icon: "exclamationmark.triangle.fill",
