@@ -18,7 +18,11 @@ struct SettingsView: View {
                 Section {
                     Button{
                         router.showScreen { router in
-                            Text("Premium")
+                            Button {
+                                settingsVM.isPremium.toggle()
+                            } label: {
+                                Text("SetPremium")
+                            }
                         }
                     } label: {
                         SettingsRow(
@@ -32,11 +36,11 @@ struct SettingsView: View {
 
                 Section(header: Text("Appearance")) {
                     Button{
-                        
+                        settingsVM.apearanceIsLight.toggle()
                     } label: {
                         SettingsRow(
-                            icon: "paintbrush",
-                            iconColor: .blue,
+                            icon: settingsVM.apearanceIsLight ? "sun.max.fill" : "moon.fill",
+                            iconColor: settingsVM.apearanceIsLight ? ColorTheme.yellow.color : ColorTheme.blue.color,
                             title: "Choose Your Look",
                             subtitle: "Switch between light, dark, or auto theme based on the time of day."
                         )
@@ -61,13 +65,14 @@ struct SettingsView: View {
 
                 Section(header: Text("Calendar")) {
                     Button{
-                        
+                        settingsVM.pointInCalendarVisable.toggle()
                     } label: {
                         SettingsRow(
                             icon: "calendar",
                             iconColor: .orange,
                             title: "Clean Up the Calendar",
-                            subtitle: "Remove visual dots for entries to keep your calendar minimal and distraction-free."
+                            subtitle: "Remove visual dots for entries to keep your calendar minimal and distraction-free.",
+                            textUnderneath: settingsVM.pointInCalendarVisable ? "ON" : "OFF"
                         )
                     }
                 }
@@ -82,7 +87,8 @@ struct SettingsView: View {
                             icon: "globe",
                             iconColor: .green,
                             title: "Select App Language",
-                            subtitle: "Change the app’s language independently from your system settings."
+                            subtitle: "Change the app’s language independently from your system settings.",
+                            textUnderneath: settingsVM.language
                         )
                     }
                 }
@@ -117,7 +123,8 @@ struct SettingsView: View {
                             icon: "clock.arrow.circlepath",
                             iconColor: .purple,
                             title: "Set Cleanup Rules",
-                            subtitle: "Automatically delete old entries after 30, 60, or 90 days."
+                            subtitle: "Automatically delete old entries after 7, 30, or 60 days.",
+                            textUnderneath: settingsVM.delete.rawValue
                         )
                     }
                 }

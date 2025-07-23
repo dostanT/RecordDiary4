@@ -7,7 +7,7 @@
 import Foundation
 import SwiftUI
 
-struct EmotionModel: Identifiable, Equatable {
+struct EmotionModel: Identifiable, Equatable, Codable {
     var id = UUID().uuidString
     var isShown: Bool
     var name: String

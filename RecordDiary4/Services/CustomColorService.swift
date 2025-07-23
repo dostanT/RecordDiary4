@@ -38,7 +38,7 @@ extension ColorTheme {
     }
 }
 
-enum ColorTheme: String, CaseIterable {
+enum ColorTheme: String, CaseIterable, Codable {
     case red, orange, yellow, green, blue, purple, pink, cyan, grayLight, black
 }
 
