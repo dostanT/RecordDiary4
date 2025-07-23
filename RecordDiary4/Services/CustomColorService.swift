@@ -15,7 +15,7 @@ class CustomColorService {
     static let green = Color(#colorLiteral(red: 0.8321695924, green: 0.985483706, blue: 0.4733308554, alpha: 1))
     static let blue = Color(#colorLiteral(red: 0.4620226622, green: 0.8382837176, blue: 1, alpha: 1))
     static let purple = Color(#colorLiteral(red: 0.8446564078, green: 0.5145705342, blue: 1, alpha: 1))
-    static let pink = Color(#colorLiteral(red: 1, green: 0.5409764051, blue: 0.8473142982, alpha: 1))
+    static let pink = Color(#colorLiteral(red: 0.9932022691, green: 0.3784358501, blue: 0.7091116905, alpha: 1))
     static let cyan = Color(#colorLiteral(red: 0.4508578777, green: 0.9882974029, blue: 0.8376303315, alpha: 1))
     static let grayLight = Color(#colorLiteral(red: 0.921431005, green: 0.9214526415, blue: 0.9214410186, alpha: 1))
     static let black = Color(#colorLiteral(red: 0, green: 0, blue: 0, alpha: 1))
