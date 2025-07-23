@@ -24,17 +24,22 @@ struct HomeView: View {
         ZStack{
             VStack{
                 Text(selectedDate.getformattedDate())
-                    .pinkBorderedAndCozyTextModifier()
+                    .pinkBorderedAndCozyTextModifier {
+                        router.showScreen { router in
+                            CalendarView(selectedDate: $selectedDate)
+                        }
+                    }
                 Text(selectedDate.getformattedWeekDay())
                     .pinkAndCozyTextModifier()
+                    .onTapGesture {
+                        router.showScreen { router in
+                            CalendarView(selectedDate: $selectedDate)
+                        }
+                    }
                 Spacer()
             }
             .padding()
-            .onTapGesture {
-                router.showScreen { router in
-                    CalendarView(selectedDate: $selectedDate)
-                }
-            }
+            
             LazyVGrid(
                 columns: columns,
                 alignment: .center,
