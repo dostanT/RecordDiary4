@@ -24,9 +24,9 @@ struct HomeView: View {
         ZStack{
             VStack{
                 Text(selectedDate.getformattedDate())
-                    .font(.headline)
+                    .pinkBorderedAndCozyTextModifier()
                 Text(selectedDate.getformattedWeekDay())
-                    .font(.caption)
+                    .pinkAndCozyTextModifier()
                 Spacer()
             }
             .padding()

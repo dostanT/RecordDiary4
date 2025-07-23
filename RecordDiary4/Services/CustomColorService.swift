@@ -19,6 +19,7 @@ class CustomColorService {
     static let cyan = Color(#colorLiteral(red: 0.4508578777, green: 0.9882974029, blue: 0.8376303315, alpha: 1))
     static let grayLight = Color(#colorLiteral(red: 0.921431005, green: 0.9214526415, blue: 0.9214410186, alpha: 1))
     static let black = Color(#colorLiteral(red: 0, green: 0, blue: 0, alpha: 1))
+    static let white = Color(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))
 }
 
 extension ColorTheme {
@@ -34,12 +35,13 @@ extension ColorTheme {
         case .cyan: return CustomColorService.cyan
         case .grayLight: return CustomColorService.grayLight
         case .black: return CustomColorService.black
+        case .white: return CustomColorService.white
         }
     }
 }
 
 enum ColorTheme: String, CaseIterable, Codable {
-    case red, orange, yellow, green, blue, purple, pink, cyan, grayLight, black
+    case red, orange, yellow, green, blue, purple, pink, cyan, grayLight, black, white
 }
 
 
