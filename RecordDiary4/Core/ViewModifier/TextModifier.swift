@@ -44,10 +44,20 @@ struct PinkBorderedAndCozyTextModifier: ViewModifier {
 
 
 struct PinkAndCozyTextModifier: ViewModifier {
+    var fontSize: CGFloat
     func body(content: Content) -> some View {
         content
-            .font(.custom("BebasNeue-Regular", size: 20))
+            .font(.custom("BebasNeue-Regular", size: fontSize))
             .foregroundStyle(ColorTheme.pink.color)
+    }
+}
+
+struct WhiteAndCozyTextModifier: ViewModifier {
+    var fontSize: CGFloat
+    func body(content: Content) -> some View {
+        content
+            .font(.custom("BebasNeue-Regular", size: fontSize))
+            .foregroundStyle(ColorTheme.white.color)
     }
 }
 
@@ -56,7 +66,11 @@ extension View {
         modifier(PinkBorderedAndCozyTextModifier(onTap: onTap))
     }
     
-    func pinkAndCozyTextModifier() -> some View {
-        modifier(PinkAndCozyTextModifier())
+    func pinkAndCozyTextModifier(fontSize: CGFloat = 20) -> some View {
+        modifier(PinkAndCozyTextModifier(fontSize: fontSize))
+    }
+    
+    func whiteAndCozyTextModifier(fontSize: CGFloat = 20) -> some View {
+        modifier(WhiteAndCozyTextModifier(fontSize: fontSize))
     }
 }

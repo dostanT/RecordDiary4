@@ -102,23 +102,22 @@ struct CalendarView: View {
     
     private var monthNavigationView: some View {
         HStack {
-            Button(action: calendarVM.previousMonth) {
-                Image(systemName: "chevron.left")
-                    .font(.title2)
-            }
+            Image(systemName: "chevron.left")
+                .pinkBorderedAndCozyTextModifier {
+                    calendarVM.previousMonth()
+                }
             
             Spacer()
             
             Text(calendarVM.getMonthYearString())
-                .font(.title2)
-                .fontWeight(.semibold)
+                .pinkAndCozyTextModifier(fontSize: 30)
             
             Spacer()
             
-            Button(action: calendarVM.nextMonth) {
-                Image(systemName: "chevron.right")
-                    .font(.title2)
-            }
+            Image(systemName: "chevron.right")
+                .pinkBorderedAndCozyTextModifier {
+                    calendarVM.nextMonth()
+                }
         }
         .padding(.horizontal)
         .padding(.vertical, 8)
@@ -130,13 +129,12 @@ struct CalendarView: View {
             HStack(spacing: 0) {
                 ForEach(calendarVM.getWeekDays(), id: \.self) { day in
                     Text(day)
-                        .font(.caption)
-                        .fontWeight(.medium)
+                        .whiteAndCozyTextModifier(fontSize: 20)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 8)
                 }
             }
-            .background(Color.gray.opacity(0.1))
+            .background(ColorTheme.pink.color)
             
             // Calendar grid
             LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 7), spacing: 0) {

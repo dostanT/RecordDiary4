@@ -14,8 +14,8 @@ struct DayCellView: View {
     var body: some View {
         VStack(spacing: 4) {
             Text("\(calendarDate.dayNumber)")
-                .font(.system(size: 16, weight: .medium))
-                .foregroundColor(calendarDate.isCurrentMonth ? .primary : .secondary)
+                .foregroundColor(calendarDate.isCurrentMonth ? ColorTheme.pink.color : ColorTheme.pink.color.opacity(0.3))
+                .pinkAndCozyTextModifier(fontSize: 20)
             
             // record indicators
             if !records.isEmpty {
@@ -31,12 +31,12 @@ struct DayCellView: View {
         .frame(height: 40)
         .frame(maxWidth: .infinity)
         .background(
-            RoundedRectangle(cornerRadius: 8)
-                .fill(isSelected ? Color.blue.opacity(0.2) : Color.clear)
+            Rectangle()
+                .fill(isSelected ? ColorTheme.pink.color.opacity(0.1) : Color.clear)
         )
         .overlay(
-            RoundedRectangle(cornerRadius: 8)
-                .stroke(calendarDate.isToday ? Color.blue : Color.clear, lineWidth: 2)
+            Rectangle()
+                .stroke(calendarDate.isToday ? ColorTheme.pink.color : Color.clear, lineWidth: 2)
         )
     }
 }
