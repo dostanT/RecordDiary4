@@ -22,6 +22,7 @@ struct HomeView: View {
     
     var body: some View {
         ZStack{
+            ColorTheme.white.color.ignoresSafeArea()
             VStack{
                 Text(selectedDate.getformattedDate())
                     .pinkBorderedAndCozyTextModifier {
@@ -47,28 +48,19 @@ struct HomeView: View {
                 pinnedViews: [],
                 content: {
                     ForEach(settingsVM.emotionInUse){ emotion in
-                        RecordingEmotionView(emotionModel: emotion, isPremium: settingsVM.isPremium)
+                        RecordingEmotionView(emotionModel: emotion, isPremium: settingsVM.isPremium, onTap: {
+                            homeVM.stopStartRecording(
+                                emotion1: settingsVM.selectedEmotion,
+                                emotion2NONOptional: emotion) {
+                                    settingsVM.stopRecording(showDate: selectedDate)
+                                } startRecording: {
+                                    settingsVM.startRecording(selectedEmotion: emotion)
+                                }
+                        })
                             .opacity(settingsVM.selectedEmotion == nil ? 1 : settingsVM.selectedEmotion!.id == emotion.id ? 1 : 0.2)
-                            .onTapGesture {
-//                                if settingsVM.selectedEmotion == nil {
-//                                    settingsVM.startRecording(selectedEmotion: emotion)
-//                                } else {
-//                                    if settingsVM.selectedEmotion == emotion{
-//                                        settingsVM.stopRecording(showDate: selectedDate)
-//                                    }
-//                                }
-                                homeVM.stopRecording(
-                                    emotion1: settingsVM.selectedEmotion,
-                                    emotion2NONOptional: emotion) {
-                                        settingsVM.stopRecording(showDate: selectedDate)
-                                    } startRecording: {
-                                        settingsVM.startRecording(selectedEmotion: emotion)
-                                    }
-
-                                
-                            }
                     }
             })
+            .padding(.horizontal)
             
             
         }

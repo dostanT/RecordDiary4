@@ -6,44 +6,14 @@
 //
 import SwiftUI
 
-struct RecordingEmotionView: View {
+struct RecordingEmotionViewOldVersion: View {
     
     let emotionModel: EmotionModel
     let isPremium: Bool
+    let onTap: () -> Void
     
     var body: some View {        
         ZStack{
-//            Rectangle()
-//                .foregroundStyle(emotionModel.color)
-//                .frame(width: 120, height: 120)
-//                .overlay{
-//                    HStack{
-//                        HStack(alignment: .top){
-//                            VStack(alignment: .leading){
-//                                if let imageName = emotionModel.iconName {
-//                                    Image(systemName: imageName)
-//                                        .font(.system(size: 25))
-//                                }
-//                                Text(emotionModel.name)
-//                                    .font(.system(size: 25))
-//                                    .bold()
-//                                Spacer()
-//                            }
-//                        }
-//                        Spacer()
-//                        HStack(alignment: .bottom){
-//                            VStack{
-//                                Spacer()
-//                                Image(systemName: "microphone.fill")
-//                                    .font(.system(size: 25))
-//                            }
-//                        }
-//                    }
-//                }
-//                .frame(width: 150, height: 150)
-//                .background(emotionModel.color)
-//                .clipShape(RoundedRectangle(cornerRadius: 30))
-            
             HStack{
                 HStack(alignment: .top){
                     VStack(alignment: .leading){
@@ -52,8 +22,7 @@ struct RecordingEmotionView: View {
                                 .font(.title3)
                         }
                         Text(emotionModel.name)
-                            .font(.title3)
-                            .bold()
+                            .pinkAndCozyTextModifier(fontSize: 30)
                         Spacer()
                     }
                 }
@@ -68,12 +37,78 @@ struct RecordingEmotionView: View {
                 }
                 .padding()
             }
-            .frame(width: 150, height: 150)
-            .background(emotionModel.color.color)
-            .clipShape(RoundedRectangle(cornerRadius: 30))
+            .background(ColorTheme.white.color)
         }
+        .padding(3)
+        .background(emotionModel.color.color)
     }
 }
+
+
+struct RecordingEmotionView: View {
+    
+    @GestureState private var isDetectingLongPress = false
+    let emotionModel: EmotionModel
+    let isPremium: Bool
+    let onTap: () -> Void
+    
+    var body: some View {
+        let pressGesture = DragGesture(minimumDistance: 0)
+            .updating($isDetectingLongPress) { _, state, _ in
+                state = true
+            }
+            .onEnded { _ in
+                onTap()
+            }
+        
+        ZStack {
+            HStack {
+                HStack(alignment: .top) {
+                    VStack(alignment: .leading) {
+                        if let imageName = emotionModel.iconName {
+                            Image(systemName: imageName)
+                                .font(.title3)
+                                .foregroundStyle(ColorTheme.pink.color)
+                        }
+                        Text(emotionModel.name)
+                            .pinkAndCozyTextModifier(fontSize: 30)
+                        Spacer()
+                    }
+                }
+                .padding()
+                
+                Spacer()
+                
+                HStack(alignment: .bottom) {
+                    VStack {
+                        Spacer()
+                        Image(systemName: "microphone.fill")
+                            .font(.title3)
+                            .foregroundStyle(ColorTheme.pink.color)
+                    }
+                }
+                .padding()
+            }
+            .background(isDetectingLongPress ? emotionModel.color.color : ColorTheme.white.color)
+            .padding(3)
+            .background(!isDetectingLongPress ? emotionModel.color.color : ColorTheme.white.color)
+            .offset(x: isDetectingLongPress ? 5 : 0,
+                    y: isDetectingLongPress ? 5 : 0)
+        }
+        .background(
+            emotionModel.color.color
+                .offset(x: isDetectingLongPress ? 5 : 0,
+                        y: isDetectingLongPress ? 5 : 0)
+        )
+        .background(
+            emotionModel.color.color
+                .opacity(isDetectingLongPress ? 0 : 1)
+                .shadow(color: emotionModel.color.color, radius: 2, x: 5, y: 5)
+        )
+        .gesture(pressGesture)
+    }
+}
+
 //
 //struct RouterLink_Previews: PreviewProvider {
 //    static var previews: some View {

@@ -18,43 +18,49 @@ struct CalendarView: View {
     
     
     var body: some View {
-        VStack(spacing: 30) {
-            monthNavigationView
-            
-            calendarGridView
-            
-            selectedView
-            
-            recordsListView
-            
-            Spacer()
-        }
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                Button{
-                    router.showScreen { router in
-                        SettingsView()
-                    }
-                } label: {
-                    Image(systemName: "gear")
+        ZStack{
+            ColorTheme.white.color.ignoresSafeArea()
+            VStack(spacing: 0) {
+                VStack(spacing: 20){
+                    monthNavigationView
+                    
+                    calendarGridView
                 }
-                .font(.headline)
+                VStack(spacing: 20){
+                    selectedViewNEW
+                    
+                    recordsListView
+                }
+                
+                Spacer()
             }
-        }
-        .onReceive(NotificationCenter.default.publisher(for: .playbackFinished)) { _ in
-            settingsVM.selectedRecord = nil
-        }
-        .onAppear {
-            calendarVM.filterRecordsWithEmotion(records: settingsVM.data, emotion: nil, shownDate: selectedDate)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button{
+                        router.showScreen { router in
+                            SettingsView()
+                        }
+                    } label: {
+                        Image(systemName: "gear")
+                    }
+                    .font(.headline)
+                }
+            }
+            .onReceive(NotificationCenter.default.publisher(for: .playbackFinished)) { _ in
+                settingsVM.selectedRecord = nil
+            }
+            .onAppear {
+                calendarVM.filterRecordsWithEmotion(records: settingsVM.data, emotion: nil, shownDate: selectedDate)
+            }
         }
     }
     
-    private var selectedView: some View {
+    private var selectedViewOLD: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 20) {
                 VStack{
                     Text("All")
-                        .foregroundColor(selectedEmotion == nil ? ColorTheme.blue.color : ColorTheme.black.color)
+                        .foregroundColor(selectedEmotion == nil ? ColorTheme.black.color : ColorTheme.pink.color)
                     
                     if selectedEmotion == nil {
                         RoundedRectangle(cornerRadius: 10)
@@ -75,7 +81,7 @@ struct CalendarView: View {
                 ForEach(settingsVM.emotionInUse) { emotion in
                     VStack {
                         Text(emotion.name)
-                            .foregroundColor(selectedEmotion?.name == emotion.name ? emotion.color.color : ColorTheme.black.color)
+                            .foregroundColor(selectedEmotion?.name == emotion.name ? emotion.color.color : ColorTheme.pink.color)
 
                         if selectedEmotion?.name == emotion.name {
                             RoundedRectangle(cornerRadius: 10)
@@ -97,6 +103,24 @@ struct CalendarView: View {
             }
             .padding(.horizontal)
             .frame(height: 55)
+        }
+    }
+    
+    private var selectedViewNEW: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 20) {
+                SortingView(name: "All", isPressed: selectedEmotion == nil) {
+                    selectedEmotion = nil
+                    calendarVM.filterRecordsWithEmotion(records: settingsVM.data, emotion: nil, shownDate: selectedDate)
+                }
+                ForEach(settingsVM.emotionInUse) { emotion in
+                    SortingView(name: emotion.name, isPressed: selectedEmotion?.name == emotion.name) {
+                        selectedEmotion = emotion
+                        calendarVM.filterRecordsWithEmotion(records: settingsVM.data, emotion: emotion, shownDate: selectedDate)
+                    }
+                }
+            }
+            .padding()
         }
     }
     
@@ -135,29 +159,31 @@ struct CalendarView: View {
                 }
             }
             .background(ColorTheme.pink.color)
-            
-            // Calendar grid
-            LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 7), spacing: 0) {
-                ForEach(calendarVM.getDaysInMonth()) { calendarDate in
-                    DayCellView(
-                        calendarDate: calendarDate,
-                        records: calendarVM.getPointFromRecords(data: settingsVM.data, selectedDate: calendarDate.date),
-                        isSelected: Calendar.current.isDate(calendarDate.date, inSameDayAs: selectedDate),
-                    )
-                    .onTapGesture {
-                        if selectedDate == calendarDate.date {
-                            router.dismissScreen()
-                        } else {
-                            selectedDate = calendarDate.date
-                            calendarVM.filterRecordsWithEmotion(records: settingsVM.data, emotion: nil, shownDate: selectedDate)
-                            
+            ZStack(alignment: .top){
+                Rectangle()
+                    .frame(height: 250)
+                    .foregroundStyle(Color.clear)
+                // Calendar grid
+                LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 7), spacing: 0) {
+                    ForEach(calendarVM.getDaysInMonth()) { calendarDate in
+                        DayCellView(
+                            calendarDate: calendarDate,
+                            records: calendarVM.getPointFromRecords(data: settingsVM.data, selectedDate: calendarDate.date),
+                            isSelected: Calendar.current.isDate(calendarDate.date, inSameDayAs: selectedDate),
+                        )
+                        .onTapGesture {
+                            if selectedDate == calendarDate.date {
+                                router.dismissScreen()
+                            } else {
+                                selectedDate = calendarDate.date
+                                calendarVM.filterRecordsWithEmotion(records: settingsVM.data, emotion: nil, shownDate: selectedDate)
+                                
+                            }
                         }
-                        
                     }
                 }
             }
         }
-        
     }
     
     private var recordsListView: some View {
