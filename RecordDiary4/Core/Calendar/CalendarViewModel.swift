@@ -12,6 +12,7 @@ class CalendarViewModel: ObservableObject {
     @Published var currentMonth: Date = Date()
     
     @Published var shownRecordsAfterFiltering: [RecordDataModel] = []
+    @Published var selectedRecord: RecordDataModel? = nil
     
     func filterRecordsWithEmotion(records: [RecordDataModel], emotion: EmotionModel?, shownDate: Date) {
         var newArr: [RecordDataModel] = []

@@ -197,19 +197,22 @@ struct CalendarView: View {
     
     private func recordsView(record: RecordDataModel) -> (some View) {
         ZStack{
-            HStack{
-                VStack(alignment: .leading){
-                    Text(record.createdDate.getFormattedHourMinutesAMPM())
-                        .foregroundStyle(record.emotion?.color.color ?? Color(#colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)))
-                    if let emotion = record.emotion {
-                        Text(emotion.name)
-                            .foregroundStyle(emotion.color.color)
+            VStack{
+                HStack{
+                    VStack(alignment: .leading){
+                        Text(record.createdDate.getFormattedHourMinutesAMPM())
+                            .foregroundStyle(record.emotion?.color.color ?? Color(#colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)))
+                        if let emotion = record.emotion {
+                            Text(emotion.name)
+                                .foregroundStyle(emotion.color.color)
+                        }
+                        
                     }
+                    .padding(.leading)
+                    Spacer()
                     
                 }
-                .padding(.leading)
-                Spacer()
-                VStack{
+                if calendarVM.selectedRecord == record {
                     Button {
                         if let selectedRecord = settingsVM.selectedRecord {
                             if selectedRecord.url == record.url {
@@ -238,15 +241,25 @@ struct CalendarView: View {
                         }
                         
                     }
+                    .transition(.move(edge: .top))
                     
                 }
-                .padding(.trailing)
                 
             }
-            .frame(height: 55)
             .background(ColorTheme.white.color)
             .padding(2)
             .background(record.emotion?.color.color ?? Color(#colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)))
+            .onTapGesture {
+                withAnimation(.spring(duration: 0.3)) {
+                    if calendarVM.selectedRecord == record  {
+                        calendarVM.selectedRecord = nil
+                    } else {
+                        calendarVM.selectedRecord = record
+                    }
+                }
+            }
+            
+            
         }
         .padding(.horizontal)
     }

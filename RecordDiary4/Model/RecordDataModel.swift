@@ -8,7 +8,7 @@
 import Foundation
 
 
-struct RecordDataModel: Identifiable, Codable {
+struct RecordDataModel: Identifiable, Codable, Equatable {
     var id = UUID().uuidString
     let url: URL
     let createdDate: Date
