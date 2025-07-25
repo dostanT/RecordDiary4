@@ -200,8 +200,10 @@ struct CalendarView: View {
             HStack{
                 VStack(alignment: .leading){
                     Text(record.createdDate.getFormattedHourMinutesAMPM())
+                        .foregroundStyle(record.emotion?.color.color ?? Color(#colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)))
                     if let emotion = record.emotion {
                         Text(emotion.name)
+                            .foregroundStyle(emotion.color.color)
                     }
                     
                 }
@@ -228,9 +230,11 @@ struct CalendarView: View {
                         if let selectedRecord = settingsVM.selectedRecord  {
                             Image(systemName: selectedRecord.url == record.url ? "stop.fill" : "play.fill")
                                 .font(.title2)
+                                .foregroundStyle(record.emotion?.color.color ?? Color(#colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)))
                         } else {
                             Image(systemName: "play.fill")
                                 .font(.title2)
+                                .foregroundStyle(record.emotion?.color.color ?? Color(#colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)))
                         }
                         
                     }
@@ -240,9 +244,11 @@ struct CalendarView: View {
                 
             }
             .frame(height: 55)
+            .background(ColorTheme.white.color)
+            .padding(2)
             .background(record.emotion?.color.color ?? Color(#colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)))
-            .clipShape(RoundedRectangle(cornerRadius: 16))
         }
+        .padding(.horizontal)
     }
     
     private func showRecordsWithSpecificEmotion(record: RecordDataModel, emotion: EmotionModel) -> (some View) {
