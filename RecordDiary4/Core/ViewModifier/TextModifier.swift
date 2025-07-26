@@ -11,6 +11,7 @@ struct PinkBorderedAndCozyTextModifier: ViewModifier {
     
     @GestureState private var isDetectingLongPress = false
     let onTap: () -> Void
+    let fontSize: CGFloat
 
     func body(content: Content) -> some View {
         let pressGesture = DragGesture(minimumDistance: 0)
@@ -22,7 +23,7 @@ struct PinkBorderedAndCozyTextModifier: ViewModifier {
             }
         
         content
-            .font(.custom("BebasNeue-Regular", size: 30))
+            .font(.custom("BebasNeue-Regular", size: fontSize))
             .foregroundStyle(ColorTheme.pink.color)
             .padding(6)
             .padding(.horizontal)
@@ -62,8 +63,8 @@ struct WhiteAndCozyTextModifier: ViewModifier {
 }
 
 extension View {
-    func pinkBorderedAndCozyTextModifier(onTap: @escaping () -> Void) -> some View {
-        modifier(PinkBorderedAndCozyTextModifier(onTap: onTap))
+    func pinkBorderedAndCozyTextModifier(fontSize: CGFloat = 30, onTap: @escaping () -> Void) -> some View {
+        modifier(PinkBorderedAndCozyTextModifier(onTap: onTap, fontSize: fontSize))
     }
     
     func pinkAndCozyTextModifier(fontSize: CGFloat = 20) -> some View {

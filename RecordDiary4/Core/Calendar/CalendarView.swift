@@ -51,6 +51,7 @@ struct CalendarView: View {
             }
             .onAppear {
                 calendarVM.filterRecordsWithEmotion(records: settingsVM.data, emotion: nil, shownDate: selectedDate)
+                calendarVM.currentMonth = selectedDate
             }
         }
     }
@@ -134,7 +135,14 @@ struct CalendarView: View {
             Spacer()
             
             Text(calendarVM.getMonthYearString())
-                .pinkAndCozyTextModifier(fontSize: 30)
+                .pinkBorderedAndCozyTextModifier(fontSize: 25) {
+                    router.showScreen(.sheet) { router in
+                        CalendarPickerSheetView(selectedDate: selectedDate, changableDate: $selectedDate){
+                            calendarVM.currentMonth = selectedDate
+                        }
+                    }
+                }
+                
             
             Spacer()
             
