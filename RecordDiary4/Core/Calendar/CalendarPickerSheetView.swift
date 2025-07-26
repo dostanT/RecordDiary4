@@ -40,11 +40,21 @@ struct CalendarPickerSheetView: View {
                             showSheet = false
                         }
                     
-                    Text("Cancel")
-                        .pinkBorderedAndCozyTextModifier(fontSize: 28) {
-                            onEnded()
-                            showSheet = false
-                        }
+                    HStack{
+                        Text("Today")
+                            .pinkBorderedAndCozyTextModifier(fontSize: 28) {
+                                changableDate = Date()
+                                onEnded()
+                                showSheet = false
+                            }
+                        
+                        Text("Cancel")
+                            .pinkBorderedAndCozyTextModifier(fontSize: 28) {
+                                onEnded()
+                                showSheet = false
+                            }
+                        
+                    }
                 }
                 Spacer()
                 

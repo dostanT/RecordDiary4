@@ -222,6 +222,36 @@ class AudioInputOutputService: NSObject, ObservableObject, AVAudioRecorderDelega
         print("All records count: \(newRecords.count)")
         return newRecords
     }
+    
+    @MainActor
+    func getDurationString(from url: URL) async -> String? {
+        let asset = AVAsset(url: url)
+
+        do {
+            let duration = try await asset.load(.duration)
+            let totalSeconds = CMTimeGetSeconds(duration)
+
+            guard totalSeconds.isFinite else { return nil }
+
+            let hours = Int(totalSeconds) / 3600
+            let minutes = (Int(totalSeconds) % 3600) / 60
+            let seconds = Int(totalSeconds) % 60
+
+            var result = ""
+            if hours > 0 {
+                result += "\(hours)h "
+            }
+            if minutes > 0 || hours > 0 {
+                result += "\(minutes)min "
+            }
+            result += "\(seconds)sec"
+
+            return result
+        } catch {
+            print("Ошибка загрузки длительности: \(error)")
+            return nil
+        }
+    }
 
 }
 

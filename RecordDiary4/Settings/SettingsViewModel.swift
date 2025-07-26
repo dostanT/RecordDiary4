@@ -89,6 +89,15 @@ class SettingsViewModel: ObservableObject {
             self?.selectedRecord = chosenRecord
         }
     }
+    
+    func getDurationString(record: RecordDataModel) async -> String {
+        if let duration = await audioInputOutputService.getDurationString(from: record.url) {
+            return duration
+        } else {
+            return "00:00"
+        }
+    }
+
 
     // MARK: - Работа с CoreData
     func saveToCoreData() {

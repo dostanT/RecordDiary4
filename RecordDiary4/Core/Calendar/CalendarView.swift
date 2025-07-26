@@ -68,7 +68,12 @@ struct CalendarView: View {
         }
 
     }
-    
+   
+}
+
+
+
+extension CalendarView {
     private var selectedViewOLD: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 20) {
@@ -217,48 +222,58 @@ struct CalendarView: View {
                 HStack{
                     VStack(alignment: .leading){
                         Text(record.createdDate.getFormattedHourMinutesAMPM())
-                            .foregroundStyle(record.emotion?.color.color ?? Color(#colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)))
+                            .customAndCozyTextModifier(fontSize: 20, color: record.emotion?.color.color ?? Color(#colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)))
                         if let emotion = record.emotion {
                             Text(emotion.name)
-                                .foregroundStyle(emotion.color.color)
+                                .customAndCozyTextModifier(fontSize: 20, color: record.emotion?.color.color ?? Color(#colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)))
                         }
                         
                     }
-                    .padding(.leading)
+                    
+                    
                     Spacer()
                     
+                    VStack{
+                        DurationTextView(record: record)
+                    }
                 }
+                .padding(.horizontal)
+                .padding(2)
                 if calendarVM.selectedRecord == record {
-                    Button {
-                        if let selectedRecord = settingsVM.selectedRecord {
-                            if selectedRecord.url == record.url {
-                                settingsVM.audioInputOutputService.stopPlayback()
-                                settingsVM.selectedRecord = nil
-                            } else {
-                                settingsVM.changeAudioPlaying(chosenRecord: record)
-                            }
-                        }
-                        else {
-                            settingsVM.audioInputOutputService.playRecording(url: record.url) { success in
-                                if success {
-                                    settingsVM.selectedRecord = record
+                    VStack{
+                        
+                        //Slider
+                        
+                        Button {
+                            if let selectedRecord = settingsVM.selectedRecord {
+                                if selectedRecord.url == record.url {
+                                    settingsVM.audioInputOutputService.stopPlayback()
+                                    settingsVM.selectedRecord = nil
+                                } else {
+                                    settingsVM.changeAudioPlaying(chosenRecord: record)
                                 }
                             }
+                            else {
+                                settingsVM.audioInputOutputService.playRecording(url: record.url) { success in
+                                    if success {
+                                        settingsVM.selectedRecord = record
+                                    }
+                                }
+                            }
+                        } label: {
+                            if let selectedRecord = settingsVM.selectedRecord  {
+                                Image(systemName: selectedRecord.url == record.url ? "stop.fill" : "play.fill")
+                            } else {
+                                Image(systemName: "play.fill")
+                            }
+                            
                         }
-                    } label: {
-                        if let selectedRecord = settingsVM.selectedRecord  {
-                            Image(systemName: selectedRecord.url == record.url ? "stop.fill" : "play.fill")
-                                .font(.title2)
-                                .foregroundStyle(record.emotion?.color.color ?? Color(#colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)))
-                        } else {
-                            Image(systemName: "play.fill")
-                                .font(.title2)
-                                .foregroundStyle(record.emotion?.color.color ?? Color(#colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)))
-                        }
+                        .font(.title2)
+                        .foregroundStyle(record.emotion?.color.color ?? Color(#colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)))
+                        .padding(2)
+                        .transition(.move(edge: .top))
                         
                     }
-                    .transition(.move(edge: .top))
-                    
                 }
                 
             }
@@ -266,12 +281,10 @@ struct CalendarView: View {
             .padding(2)
             .background(record.emotion?.color.color ?? Color(#colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)))
             .onTapGesture {
-                withAnimation(.spring(duration: 0.3)) {
-                    if calendarVM.selectedRecord == record  {
-                        calendarVM.selectedRecord = nil
-                    } else {
-                        calendarVM.selectedRecord = record
-                    }
+                if calendarVM.selectedRecord == record  {
+                    calendarVM.selectedRecord = nil
+                } else {
+                    calendarVM.selectedRecord = record
                 }
             }
             
