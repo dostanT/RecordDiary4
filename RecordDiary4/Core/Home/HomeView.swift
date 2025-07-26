@@ -64,5 +64,6 @@ struct HomeView: View {
             
             
         }
+        .preferredColorScheme(settingsVM.apearanceIsLight ? .light : .dark)
     }
 }

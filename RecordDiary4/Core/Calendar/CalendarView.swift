@@ -54,6 +54,7 @@ struct CalendarView: View {
                 calendarVM.currentMonth = selectedDate
             }
         }
+        .preferredColorScheme(settingsVM.apearanceIsLight ? .light : .dark)
     }
     
     private var selectedViewOLD: some View {
