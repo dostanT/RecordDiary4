@@ -147,7 +147,6 @@ struct SettingsView: View {
                 .tint(Color.primary)
             }
         }
-        .preferredColorScheme(settingsVM.apearanceIsLight ? .light : .dark)
     }
 }
 

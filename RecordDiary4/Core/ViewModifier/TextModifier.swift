@@ -63,7 +63,7 @@ struct WhiteAndCozyTextModifier: ViewModifier {
 }
 
 extension View {
-    func pinkBorderedAndCozyTextModifier(fontSize: CGFloat = 30, onTap: @escaping () -> Void) -> some View {
+    func pinkBorderedAndCozyTextModifier(fontSize: CGFloat = 28, onTap: @escaping () -> Void) -> some View {
         modifier(PinkBorderedAndCozyTextModifier(onTap: onTap, fontSize: fontSize))
     }
     

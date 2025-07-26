@@ -9,13 +9,17 @@ import SwiftfulRouting
 import Combine
 
 struct CalendarView: View {
+    //VMs
     @Environment(\.router) var router
     @EnvironmentObject private var settingsVM: SettingsViewModel
     @StateObject private var calendarVM = CalendarViewModel()
+    
     @Binding var selectedDate: Date
     @State private var selectedEmotion: EmotionModel? = nil
+    
     @Namespace private var namespace
     
+    @State private var showSheet: Bool = false
     
     var body: some View {
         ZStack{
@@ -54,7 +58,15 @@ struct CalendarView: View {
                 calendarVM.currentMonth = selectedDate
             }
         }
-        .preferredColorScheme(settingsVM.apearanceIsLight ? .light : .dark)
+        .sheet(isPresented: $showSheet) {
+            CalendarPickerSheetView(selectedDate: selectedDate, changableDate: $selectedDate, showSheet: $showSheet){
+                calendarVM.currentMonth = selectedDate
+            }
+            .presentationDetents([.height(UIScreen.main.bounds.height * 45/100)])
+            .presentationDragIndicator(.visible)
+            .interactiveDismissDisabled(true)
+        }
+
     }
     
     private var selectedViewOLD: some View {
@@ -136,14 +148,9 @@ struct CalendarView: View {
             Spacer()
             
             Text(calendarVM.getMonthYearString())
-                .pinkBorderedAndCozyTextModifier(fontSize: 25) {
-                    router.showScreen(.sheet) { router in
-                        CalendarPickerSheetView(selectedDate: selectedDate, changableDate: $selectedDate){
-                            calendarVM.currentMonth = selectedDate
-                        }
-                    }
+                .pinkBorderedAndCozyTextModifier(fontSize: 24) {
+                    showSheet = true
                 }
-                
             
             Spacer()
             

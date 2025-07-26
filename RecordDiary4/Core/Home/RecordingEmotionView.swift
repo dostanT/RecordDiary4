@@ -22,7 +22,7 @@ struct RecordingEmotionViewOldVersion: View {
                                 .font(.title3)
                         }
                         Text(emotionModel.name)
-                            .pinkAndCozyTextModifier(fontSize: 30)
+                            .pinkAndCozyTextModifier(fontSize: 28)
                         Spacer()
                     }
                 }
@@ -71,7 +71,7 @@ struct RecordingEmotionView: View {
                                 .foregroundStyle(ColorTheme.pink.color)
                         }
                         Text(emotionModel.name)
-                            .pinkAndCozyTextModifier(fontSize: 30)
+                            .pinkAndCozyTextModifier(fontSize: 28)
                         Spacer()
                     }
                 }
