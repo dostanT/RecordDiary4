@@ -11,6 +11,11 @@ struct SettingsView: View {
     
     @Environment(\.router) var router
     @EnvironmentObject private var settingsVM: SettingsViewModel
+    @StateObject var calendarVM: CalendarViewModel
+    
+    init(calendarVM: CalendarViewModel) {
+        self._calendarVM = StateObject(wrappedValue: calendarVM)
+    }
     
     var body: some View {
         ZStack{
@@ -134,6 +139,7 @@ struct SettingsView: View {
                     Section {
                         Button{
                             settingsVM.deleteAll()
+                            calendarVM.shownRecordsAfterFiltering = []
                         } label: {
                             SettingsRow(
                                 icon: "exclamationmark.triangle.fill",

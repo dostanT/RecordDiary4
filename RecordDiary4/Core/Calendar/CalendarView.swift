@@ -42,7 +42,7 @@ struct CalendarView: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button{
                         router.showScreen { router in
-                            SettingsView()
+                            SettingsView(calendarVM: calendarVM)
                         }
                     } label: {
                         Image(systemName: "gear")
