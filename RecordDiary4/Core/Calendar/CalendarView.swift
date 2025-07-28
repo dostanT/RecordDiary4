@@ -20,6 +20,7 @@ struct CalendarView: View {
     @Namespace private var namespace
     
     @State private var showSheet: Bool = false
+    @State private var showCalendar: Bool = false
     
     var body: some View {
         ZStack{
@@ -28,7 +29,10 @@ struct CalendarView: View {
                 VStack(spacing: 20){
                     monthNavigationView
                     
-                    calendarGridView
+                    if showCalendar{
+                        calendarGridView
+                            .opacity(showCalendar ? 1 : 0)
+                    }
                 }
                 VStack(spacing: 20){
                     selectedViewNEW
@@ -153,9 +157,14 @@ extension CalendarView {
             Spacer()
             
             Text(calendarVM.getMonthYearString())
-                .pinkBorderedAndCozyTextModifier(fontSize: 24) {
+                .pinkBorderedAndCozyImageTextButtonModifierLongPress(fontSize: 24) {
+                    withAnimation(.spring()) {
+                        showCalendar.toggle()
+                    }
+                } onLongTap: {
                     showSheet = true
                 }
+
             
             Spacer()
             

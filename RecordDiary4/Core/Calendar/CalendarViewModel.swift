@@ -8,7 +8,6 @@
 import SwiftUI
 
 class CalendarViewModel: ObservableObject {
-    @Published var selectedDate: Date = Date()
     @Published var currentMonth: Date = Date()
     
     @Published var shownRecordsAfterFiltering: [RecordDataModel] = []

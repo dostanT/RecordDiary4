@@ -43,6 +43,50 @@ struct PinkBorderedAndCozyTextModifier: ViewModifier {
     }
 }
 
+struct PinkBorderedAndCozyTextModifierLongPress: ViewModifier {
+    
+    @GestureState private var isDetectingLongPress = false
+    let onTap: () -> Void
+    let onLongPress: () -> Void
+    let fontSize: CGFloat
+
+    func body(content: Content) -> some View {
+        let longPressGesture = LongPressGesture(minimumDuration: 0.4)
+            .updating($isDetectingLongPress) { current, state, _ in
+                state = current
+            }
+            .onEnded { _ in
+                onLongPress()
+            }
+        
+        let tapGesture = TapGesture()
+            .onEnded {
+                onTap()
+            }
+
+        content
+            .font(.custom("BebasNeue-Regular", size: fontSize))
+            .foregroundStyle(ColorTheme.pink.color)
+            .padding(6)
+            .padding(.horizontal)
+            .background(ColorTheme.white.color)
+            .offset(x: isDetectingLongPress ? 5 : 0, y: isDetectingLongPress ? 5 : 0)
+            .padding(3)
+            .background(
+                ColorTheme.pink.color
+                    .offset(x: isDetectingLongPress ? 5 : 0, y: isDetectingLongPress ? 5 : 0)
+            )
+            .background(
+                ColorTheme.pink.color
+                    .opacity(isDetectingLongPress ? 0 : 1)
+                    .shadow(color: ColorTheme.pink.color, radius: 2, x: 5, y: 5)
+            )
+            .simultaneousGesture(tapGesture)
+            .gesture(longPressGesture)
+    }
+}
+
+
 struct PinkBorderedAndCozyImageTextButtonModifier: ViewModifier {
     
     @GestureState private var isDetectingLongPress = false
@@ -111,6 +155,9 @@ struct CustomAndCozyTextModifier: ViewModifier {
 extension View {
     func pinkBorderedAndCozyImageTextButtonModifier(fontSize: CGFloat = 28, onTap: @escaping () -> Void) -> some View {
         modifier(PinkBorderedAndCozyImageTextButtonModifier(onTap: onTap, fontSize: fontSize))
+    }
+    func pinkBorderedAndCozyImageTextButtonModifierLongPress(fontSize: CGFloat = 28, onTap: @escaping () -> Void, onLongTap: @escaping () -> Void) -> some View {
+        modifier(PinkBorderedAndCozyTextModifierLongPress(onTap: onTap, onLongPress: onLongTap, fontSize: fontSize))
     }
     
     func pinkBorderedAndCozyTextModifier(fontSize: CGFloat = 28, onTap: @escaping () -> Void) -> some View {
