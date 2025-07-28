@@ -123,6 +123,42 @@ struct PinkBorderedAndCozyImageTextButtonModifier: ViewModifier {
     }
 }
 
+struct CustomBorderedAndCozyImageTextButtonModifier: ViewModifier {
+    
+    @GestureState private var isDetectingLongPress = false
+    let onTap: () -> Void
+    let fontSize: CGFloat
+    let color: Color
+
+    func body(content: Content) -> some View {
+        let pressGesture = DragGesture(minimumDistance: 0)
+            .updating($isDetectingLongPress) { _, state, _ in
+                state = true
+            }
+            .onEnded { _ in
+                onTap()
+            }
+        
+        content
+            .font(.system(size: fontSize))
+            .foregroundStyle(color)
+            .padding(6)
+            .background(ColorTheme.white.color)
+            .offset(x: isDetectingLongPress ? 5 : 0, y: isDetectingLongPress ? 5 : 0)
+            .padding(3)
+            .background(
+                color
+                    .offset(x: isDetectingLongPress ? 5 : 0, y: isDetectingLongPress ? 5 : 0)
+            )
+            .background(
+                color
+                    .opacity(isDetectingLongPress ? 0 : 1)
+                    .shadow(color: color, radius: 2, x: 5, y: 5)
+            )
+            .gesture(pressGesture)
+    }
+}
+
 
 struct PinkAndCozyTextModifier: ViewModifier {
     var fontSize: CGFloat
@@ -158,6 +194,10 @@ extension View {
     }
     func pinkBorderedAndCozyImageTextButtonModifierLongPress(fontSize: CGFloat = 28, onTap: @escaping () -> Void, onLongTap: @escaping () -> Void) -> some View {
         modifier(PinkBorderedAndCozyTextModifierLongPress(onTap: onTap, onLongPress: onLongTap, fontSize: fontSize))
+    }
+    
+    func customBorderedAndCozyImageTextButtonModifier(fontSize: CGFloat = 28, onTap: @escaping () -> Void, color: Color) -> some View {
+        modifier(CustomBorderedAndCozyImageTextButtonModifier(onTap: onTap, fontSize: fontSize, color: color))
     }
     
     func pinkBorderedAndCozyTextModifier(fontSize: CGFloat = 28, onTap: @escaping () -> Void) -> some View {

@@ -12,8 +12,6 @@ struct RecentDeletedView: View {
     @EnvironmentObject private var settingsVM: SettingsViewModel
     @EnvironmentObject var calendarVM: CalendarViewModel
     
-    
-    
     var body: some View {
         ScrollView{
             ForEach(settingsVM.recentDeleted) { record in
