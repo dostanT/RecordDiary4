@@ -65,6 +65,7 @@ struct CalendarView: View {
         .sheet(isPresented: $showSheet) {
             CalendarPickerSheetView(selectedDate: selectedDate, changableDate: $selectedDate, showSheet: $showSheet){
                 calendarVM.currentMonth = selectedDate
+                calendarVM.filterRecordsWithEmotion(records: settingsVM.data, emotion: selectedEmotion, shownDate: selectedDate, inMouth: showCalendar)
             }
             .presentationDetents([.height(UIScreen.main.bounds.height * 45/100)])
             .presentationDragIndicator(.visible)
@@ -152,6 +153,9 @@ extension CalendarView {
             Image(systemName: "chevron.left")
                 .pinkBorderedAndCozyTextModifier {
                     calendarVM.previousMonth()
+                    withAnimation(.spring()) {
+                        showCalendar = true
+                    }
                 }
             
             Spacer()
@@ -172,6 +176,9 @@ extension CalendarView {
             Image(systemName: "chevron.right")
                 .pinkBorderedAndCozyTextModifier {
                     calendarVM.nextMonth()
+                    withAnimation(.spring()) {
+                        showCalendar = true
+                    }
                 }
         }
         .padding(.horizontal)
