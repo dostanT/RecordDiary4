@@ -251,6 +251,9 @@ extension CalendarView {
                     Spacer()
                     
                     VStack{
+                        Button("Check"){
+                            settingsVM.data[0].deletedDay = Date()
+                        }
                         DurationTextView(record: record)
                     }
                 }

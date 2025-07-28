@@ -15,6 +15,8 @@ struct RecordDataModel: Identifiable, Codable, Equatable {
     let shownDay: Date?
     var emotion: EmotionModel?
     var nameIdentifier: String?
+    var deletedDay: Date?
+    var itemIsDeleted: Bool = false
     
     static var defaultRecordDataModel: RecordDataModel {
         RecordDataModel(url: URL(string: "nil")!, createdDate: Date(), shownDay: Date())

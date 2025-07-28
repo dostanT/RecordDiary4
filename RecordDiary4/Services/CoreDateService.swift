@@ -95,7 +95,10 @@ class CoreDateService {
                     createdDate: recordEntity.createdDate ?? Date(),
                     shownDay: recordEntity.shownDate ?? Date(),
                     emotion: emotion,
-                    nameIdentifier: recordEntity.nameIdentefier ?? "")
+                    nameIdentifier: recordEntity.nameIdentefier ?? "",
+                    deletedDay: recordEntity.deletedDate ?? nil,
+                    itemIsDeleted: recordEntity.itemIsDeleted ?? false
+                )
             }
         } catch  {
             print("❌ Ошибка при загрузке из Core Data: \(error.localizedDescription)")
@@ -121,6 +124,8 @@ class CoreDateService {
         recordEntity.emotion = emotion
         recordEntity.nameIdentefier = record.nameIdentifier
         recordEntity.shownDate = record.shownDay
+        recordEntity.deletedDate = record.deletedDay
+        recordEntity.itemIsDeleted = record.itemIsDeleted
         
         do {
             try context.save()
@@ -149,6 +154,8 @@ class CoreDateService {
             recordEntity.emotion = emotion
             recordEntity.nameIdentefier = record.nameIdentifier
             recordEntity.shownDate = record.shownDay
+            recordEntity.deletedDate = record.deletedDay
+            recordEntity.itemIsDeleted = record.itemIsDeleted
         }
 
         do {
@@ -190,9 +197,9 @@ class CoreDateService {
         do {
             try container.viewContext.execute(deleteRequest)
             try container.viewContext.save()
-            print("🗑️ Успешно удалены все HumanEntity")
+            print("🗑️ Успешно удалены все Данные")
         } catch {
-            print("❌ Ошибка при удалении всех людей: \(error)")
+            print("❌ Ошибка при удалении всех Данных: \(error)")
         }
         fetchAll()
     }

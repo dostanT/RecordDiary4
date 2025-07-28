@@ -199,7 +199,11 @@ class AudioInputOutputService: NSObject, ObservableObject, AVAudioRecorderDelega
                     createdDate: existing.createdDate,
                     shownDay: existing.shownDay,
                     emotion: existing.emotion,
-                    nameIdentifier: existing.nameIdentifier)
+                    nameIdentifier: existing.nameIdentifier,
+                    deletedDay: existing.deletedDay,
+                    itemIsDeleted: existing.itemIsDeleted
+                )
+                
                 newRecords.append(recordToUpdate)
             } else {
                 countOfRecordsWithoutEmotions += 1
@@ -210,7 +214,9 @@ class AudioInputOutputService: NSObject, ObservableObject, AVAudioRecorderDelega
                         createdDate: record.createdDate,
                         shownDay: Date(),
                         emotion: emotion,
-                        nameIdentifier: record.nameIdentifier
+                        nameIdentifier: record.nameIdentifier,
+                        deletedDay: nil,
+                        itemIsDeleted: false
                     )
                 )
             }

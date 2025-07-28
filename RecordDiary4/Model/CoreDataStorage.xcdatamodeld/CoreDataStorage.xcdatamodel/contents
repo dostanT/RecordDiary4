@@ -10,7 +10,9 @@
     </entity>
     <entity name="RecordEntity" representedClassName="RecordEntity" syncable="YES" codeGenerationType="class">
         <attribute name="createdDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="deletedDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" optional="YES" attributeType="String"/>
+        <attribute name="itemIsDeleted" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="nameIdentefier" optional="YES" attributeType="String"/>
         <attribute name="shownDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="url" optional="YES" attributeType="URI"/>
