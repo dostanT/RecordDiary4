@@ -97,7 +97,7 @@ class CoreDateService {
                     emotion: emotion,
                     nameIdentifier: recordEntity.nameIdentefier ?? "",
                     deletedDay: recordEntity.deletedDate ?? nil,
-                    itemIsDeleted: recordEntity.itemIsDeleted ?? false
+                    itemIsDeleted: recordEntity.itemIsDeleted
                 )
             }
         } catch  {
