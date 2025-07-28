@@ -11,13 +11,9 @@ struct SettingsView: View {
     
     @Environment(\.router) var router
     @EnvironmentObject private var settingsVM: SettingsViewModel
-    @StateObject var calendarVM: CalendarViewModel
+    @EnvironmentObject var calendarVM: CalendarViewModel
     @State private var selectedSettingsForShowDescription: String? = nil
     
-    
-    init(calendarVM: CalendarViewModel) {
-        self._calendarVM = StateObject(wrappedValue: calendarVM)
-    }
     
     var body: some View {
         ZStack{

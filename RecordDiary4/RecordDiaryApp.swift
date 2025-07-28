@@ -12,12 +12,14 @@ import SwiftfulRouting
 struct RecordDiaryApp: App {
     @Environment(\.scenePhase) var scenePhase
     @StateObject private var settingsVM = SettingsViewModel()
+    @StateObject private var calendatVM = CalendarViewModel()
     var body: some Scene {
         WindowGroup {
             RouterView { router in
                 HomeView()
             }
             .environmentObject(settingsVM)
+            .environmentObject(calendatVM)
         }
         .onChange(of: scenePhase) { oldPhase, newPhase in
             if newPhase == .background {

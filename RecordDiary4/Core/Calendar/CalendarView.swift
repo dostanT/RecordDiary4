@@ -12,7 +12,7 @@ struct CalendarView: View {
     //VMs
     @Environment(\.router) var router
     @EnvironmentObject private var settingsVM: SettingsViewModel
-    @StateObject private var calendarVM = CalendarViewModel()
+    @EnvironmentObject private var calendarVM: CalendarViewModel
     
     @Binding var selectedDate: Date
     @State private var selectedEmotion: EmotionModel? = nil
@@ -46,7 +46,7 @@ struct CalendarView: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button{
                         router.showScreen { router in
-                            SettingsView(calendarVM: calendarVM)
+                            SettingsView()
                         }
                     } label: {
                         Image(systemName: "gear")
@@ -79,57 +79,6 @@ struct CalendarView: View {
 
 
 extension CalendarView {
-    private var selectedViewOLD: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 20) {
-                VStack{
-                    Text("All")
-                        .foregroundColor(selectedEmotion == nil ? ColorTheme.black.color : ColorTheme.pink.color)
-                    
-                    if selectedEmotion == nil {
-                        RoundedRectangle(cornerRadius: 10)
-                            .fill(ColorTheme.blue.color)
-                            .matchedGeometryEffect(id: "category_background", in: namespace)
-                            .frame(width: 35, height: 2)
-                            .offset(y: 4)
-                    } else {
-                        Color.clear.frame(height: 2)
-                    }
-                }
-                .onTapGesture {
-                    withAnimation(.spring()) {
-                        selectedEmotion = nil
-                    }
-                    calendarVM.filterRecordsWithEmotion(records: settingsVM.data, emotion: nil, shownDate: selectedDate, inMouth: showCalendar)
-                }
-                ForEach(settingsVM.emotionInUse) { emotion in
-                    VStack {
-                        Text(emotion.name)
-                            .foregroundColor(selectedEmotion?.name == emotion.name ? emotion.color.color : ColorTheme.pink.color)
-
-                        if selectedEmotion?.name == emotion.name {
-                            RoundedRectangle(cornerRadius: 10)
-                                .fill(emotion.color.color)
-                                .matchedGeometryEffect(id: "category_background", in: namespace)
-                                .frame(width: 35, height: 2)
-                                .offset(y: 4)
-                        } else {
-                            Color.clear.frame(height: 2)
-                        }
-                    }
-                    .onTapGesture {
-                        withAnimation(.spring()) {
-                            selectedEmotion = emotion
-                        }
-                        calendarVM.filterRecordsWithEmotion(records: settingsVM.data, emotion: emotion, shownDate: selectedDate, inMouth: showCalendar)
-                    }
-                }
-            }
-            .padding(.horizontal)
-            .frame(height: 55)
-        }
-    }
-    
     private var selectedViewNEW: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 20) {
@@ -227,13 +176,31 @@ extension CalendarView {
     private var recordsListView: some View {
         ScrollView{
             ForEach(calendarVM.shownRecordsAfterFiltering) { record in
-                recordsView(record: record)
+                RecordCardView(record: record)
             }
         }
         .listStyle(PlainListStyle())
     }
     
-    private func recordsView(record: RecordDataModel) -> (some View) {
+    
+//    private func showRecordsWithSpecificEmotion(record: RecordDataModel, emotion: EmotionModel) -> (some View) {
+//        ZStack{
+//            if let currentEmotion = record.emotion {
+//                if currentEmotion.name == emotion.name {
+//                    recordsView(record: record)
+//                }
+//            }
+//        }
+//    }
+}
+
+struct RecordCardView: View {
+    
+    @EnvironmentObject private var settingsVM: SettingsViewModel
+    @EnvironmentObject private var calendarVM: CalendarViewModel
+    let record: RecordDataModel
+    
+    var body: some View {
         ZStack{
             VStack{
                 HStack{
@@ -256,11 +223,10 @@ extension CalendarView {
                 }
                 .padding(.horizontal)
                 .padding(2)
+                
                 if calendarVM.selectedRecord == record {
                     VStack{
-                        
                         //Slider
-                        
                         Button {
                             if let selectedRecord = settingsVM.selectedRecord {
                                 if selectedRecord.url == record.url {
@@ -308,15 +274,5 @@ extension CalendarView {
             
         }
         .padding(.horizontal)
-    }
-    
-    private func showRecordsWithSpecificEmotion(record: RecordDataModel, emotion: EmotionModel) -> (some View) {
-        ZStack{
-            if let currentEmotion = record.emotion {
-                if currentEmotion.name == emotion.name {
-                    recordsView(record: record)
-                }
-            }
-        }
     }
 }
