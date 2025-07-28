@@ -44,6 +44,7 @@ class SettingsViewModel: ObservableObject {
                 guard let self else { return }
                 if !returnedData.isEmpty {
                     self.data = self.audioInputOutputService.giveEmotionsForRecordsWithoutEmotions(recordsLocal: returnedData)
+                    self.sortData(fromExistToDelete: true)
                 }
             }
             .store(in: &cancellables)
@@ -54,7 +55,7 @@ class SettingsViewModel: ObservableObject {
         print("Start setupAutoSave()")
         Publishers.CombineLatest3(
             $isPremium.combineLatest($apearanceIsLight, $pointInCalendarVisable),
-            $language.combineLatest($recentDeleted, $emotionInUse),
+            $language.combineLatest($emotionInUse),
             $disableRecentDeleted.combineLatest($delete)
         )
         .sink { [weak self] _, _, _ in
@@ -62,6 +63,7 @@ class SettingsViewModel: ObservableObject {
         }
         .store(in: &cancellables)
     }
+
 
     // MARK: - Запись
     func startRecording(selectedEmotion: EmotionModel) {
@@ -119,7 +121,6 @@ class SettingsViewModel: ObservableObject {
         apearanceIsLight = model.apearanceIsLight
         pointInCalendarVisable = model.pointInCalendarVisable
         language = model.language
-        recentDeleted = model.recentDeleted
         disableRecentDeleted = model.disableRecentDeleted
         delete = model.delete
         emotionInUse = model.emotionInUse
@@ -132,7 +133,6 @@ class SettingsViewModel: ObservableObject {
                 apearanceIsLight: self.apearanceIsLight,
                 pointInCalendarVisable: self.pointInCalendarVisable,
                 language: self.language,
-                recentDeleted: self.recentDeleted,
                 disableRecentDeleted: self.disableRecentDeleted,
                 delete: self.delete,
                 emotionInUse: self.emotionInUse
@@ -194,5 +194,32 @@ class SettingsViewModel: ObservableObject {
         case .never:
             delete = .days7
         }
+    }
+    
+    func sortData(fromExistToDelete: Bool) {
+        if fromExistToDelete {
+            for item in data{
+                if item.itemIsDeleted {
+                    recentDeleted.append(item)
+                    removeRecordFromData(item)
+                }
+            }
+        } else {
+            for item in recentDeleted{
+                data.append(item)
+            }
+            recentDeleted = []
+        }
+        
+    }
+    
+    func removeRecordFromData(_ record: RecordDataModel) {
+        var newData: [RecordDataModel] = []
+        for item in data {
+            if item != record {
+                newData.append(item)
+            }
+        }
+        data = newData
     }
 }

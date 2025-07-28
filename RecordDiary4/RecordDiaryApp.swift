@@ -22,7 +22,10 @@ struct RecordDiaryApp: App {
         .onChange(of: scenePhase) { oldPhase, newPhase in
             if newPhase == .background {
                 print(newPhase)
-                print(settingsVM.data)
+                print("Before: \(settingsVM.data)")
+                print("➡️\(settingsVM.recentDeleted)")
+                settingsVM.sortData(fromExistToDelete: false)
+                print("After: \(settingsVM.data)")
                 settingsVM.saveToCoreData()
             }
         }

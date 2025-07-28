@@ -12,7 +12,6 @@ struct SettingsModel: Codable {
     var apearanceIsLight: Bool
     var pointInCalendarVisable: Bool
     var language: String
-    var recentDeleted: [RecordDataModel]
     var disableRecentDeleted: Bool
     var delete: DeletingType
     var emotionInUse: [EmotionModel]
