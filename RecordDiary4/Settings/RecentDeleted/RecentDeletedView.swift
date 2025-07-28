@@ -33,6 +33,10 @@ struct RecentDeletedView: View {
             ToolbarItem(placement: .topBarTrailing) {
                 if isEditing {
                     HStack{
+                        Text("Restore")
+                            .pinkBorderedAndCozyTextModifier(fontSize: 16) {
+                                isEditing = false
+                            }
                         Text("Delete")
                             .pinkBorderedAndCozyTextModifier(fontSize: 16) {
                                 isEditing = false
