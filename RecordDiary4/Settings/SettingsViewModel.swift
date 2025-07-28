@@ -198,12 +198,14 @@ class SettingsViewModel: ObservableObject {
     
     func sortData(fromExistToDelete: Bool) {
         if fromExistToDelete {
+            var newArr: [RecordDataModel] = []
             for item in data{
                 if item.itemIsDeleted {
-                    recentDeleted.append(item)
+                    newArr.append(item)
                     removeRecordFromData(item)
                 }
             }
+            recentDeleted = newArr
         } else {
             for item in recentDeleted{
                 data.append(item)
