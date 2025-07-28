@@ -13,14 +13,20 @@ class CalendarViewModel: ObservableObject {
     @Published var shownRecordsAfterFiltering: [RecordDataModel] = []
     @Published var selectedRecord: RecordDataModel? = nil
     
-    func filterRecordsWithEmotion(records: [RecordDataModel], emotion: EmotionModel?, shownDate: Date) {
+    func filterRecordsWithEmotion(records: [RecordDataModel], emotion: EmotionModel?, shownDate: Date, inMouth: Bool) {
         var newArr: [RecordDataModel] = []
         
         guard let emotion = emotion else {
             for record in records {
                 if let shownDayRec = record.shownDay {
-                    if shownDayRec.getFormattedYearMonthDay() == shownDate.getFormattedYearMonthDay() {
-                        newArr.append(record)
+                    if !inMouth {
+                        if shownDayRec.getFormattedYearMonth() == shownDate.getFormattedYearMonth() {
+                            newArr.append(record)
+                        }
+                    } else {
+                        if shownDayRec.getFormattedYearMonthDay() == shownDate.getFormattedYearMonthDay() {
+                            newArr.append(record)
+                        }
                     }
                 }
                 shownRecordsAfterFiltering = newArr

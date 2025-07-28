@@ -30,6 +30,7 @@ class SettingsViewModel: ObservableObject {
     // MARK: - Init
     init() {
         loadSettings()
+        data = audioInputOutputService.giveEmotionsForRecordsWithoutEmotions(recordsLocal: data)
         addCoreDataSubscriber()
         setupAutoSave()
     }

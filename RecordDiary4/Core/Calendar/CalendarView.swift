@@ -58,7 +58,7 @@ struct CalendarView: View {
                 settingsVM.selectedRecord = nil
             }
             .onAppear {
-                calendarVM.filterRecordsWithEmotion(records: settingsVM.data, emotion: nil, shownDate: selectedDate)
+                calendarVM.filterRecordsWithEmotion(records: settingsVM.data, emotion: nil, shownDate: selectedDate, inMouth: showCalendar)
                 calendarVM.currentMonth = selectedDate
             }
         }
@@ -99,7 +99,7 @@ extension CalendarView {
                     withAnimation(.spring()) {
                         selectedEmotion = nil
                     }
-                    calendarVM.filterRecordsWithEmotion(records: settingsVM.data, emotion: nil, shownDate: selectedDate)
+                    calendarVM.filterRecordsWithEmotion(records: settingsVM.data, emotion: nil, shownDate: selectedDate, inMouth: showCalendar)
                 }
                 ForEach(settingsVM.emotionInUse) { emotion in
                     VStack {
@@ -120,7 +120,7 @@ extension CalendarView {
                         withAnimation(.spring()) {
                             selectedEmotion = emotion
                         }
-                        calendarVM.filterRecordsWithEmotion(records: settingsVM.data, emotion: emotion, shownDate: selectedDate)
+                        calendarVM.filterRecordsWithEmotion(records: settingsVM.data, emotion: emotion, shownDate: selectedDate, inMouth: showCalendar)
                     }
                 }
             }
@@ -134,12 +134,12 @@ extension CalendarView {
             HStack(spacing: 20) {
                 SortingView(name: "All", isPressed: selectedEmotion == nil) {
                     selectedEmotion = nil
-                    calendarVM.filterRecordsWithEmotion(records: settingsVM.data, emotion: nil, shownDate: selectedDate)
+                    calendarVM.filterRecordsWithEmotion(records: settingsVM.data, emotion: nil, shownDate: selectedDate, inMouth: showCalendar)
                 }
                 ForEach(settingsVM.emotionInUse) { emotion in
                     SortingView(name: emotion.name, isPressed: selectedEmotion?.name == emotion.name) {
                         selectedEmotion = emotion
-                        calendarVM.filterRecordsWithEmotion(records: settingsVM.data, emotion: emotion, shownDate: selectedDate)
+                        calendarVM.filterRecordsWithEmotion(records: settingsVM.data, emotion: emotion, shownDate: selectedDate, inMouth: showCalendar)
                     }
                 }
             }
@@ -161,6 +161,7 @@ extension CalendarView {
                     withAnimation(.spring()) {
                         showCalendar.toggle()
                     }
+                    calendarVM.filterRecordsWithEmotion(records: settingsVM.data, emotion: selectedEmotion, shownDate: selectedDate, inMouth: showCalendar)
                 } onLongTap: {
                     showSheet = true
                 }
@@ -206,7 +207,7 @@ extension CalendarView {
                                 router.dismissScreen()
                             } else {
                                 selectedDate = calendarDate.date
-                                calendarVM.filterRecordsWithEmotion(records: settingsVM.data, emotion: nil, shownDate: selectedDate)
+                                calendarVM.filterRecordsWithEmotion(records: settingsVM.data, emotion: nil, shownDate: selectedDate, inMouth: showCalendar)
                                 
                             }
                         }

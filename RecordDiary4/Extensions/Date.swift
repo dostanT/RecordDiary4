@@ -38,4 +38,11 @@ extension Date {
         formatter.locale = Locale(identifier: "en_US") // чтобы месяц был на английском
         return formatter.string(from: self)
     }
+    
+    func getFormattedYearMonth() -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy MMMM"
+        formatter.locale = Locale(identifier: "en_US") // чтобы месяц был на английском
+        return formatter.string(from: self)
+    }
 }
