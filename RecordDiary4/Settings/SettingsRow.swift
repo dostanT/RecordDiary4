@@ -6,37 +6,46 @@
 //
 import SwiftUI
 
-struct SettingsRow: View {
+struct SettingsRow<Content: View>: View {
     var icon: String
-    var iconColor: Color
     var title: String
     var subtitle: String
-    var textUnderneath: String = ""
+    
+    @ViewBuilder var content: Content
+    @Binding var selectedSettingsForShowDescription: String?
 
     var body: some View {
-        HStack(alignment: .top, spacing: 12) {
-            VStack{
+        VStack() {
+            HStack{
                 Image(systemName: icon)
                     .font(.system(size: 20))
-                    .foregroundColor(iconColor)
+                    .foregroundColor(ColorTheme.pink.color)
                     .frame(width: 32, height: 32)
-                    .background(iconColor.opacity(0.15))
-                    .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+                    .background(ColorTheme.pink.color.opacity(0.15))
                 
-                Text(textUnderneath)
-                    .font(.headline)
-            }
-
-            VStack(alignment: .leading, spacing: 4) {
                 Text(title)
-                    .font(.headline)
-
-                Text(subtitle)
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
+                    .pinkAndCozyTextModifier(fontSize: 20)
+                    .onTapGesture {
+                        selectedSettingsForShowDescription = selectedSettingsForShowDescription == title ? nil : title
+                    }
+                Spacer()
+                content
+            }
+            HStack() {
+                if selectedSettingsForShowDescription == title {
+                    Rectangle()
+                        .frame(width: 32, height: 32)
+                        .opacity(0.0001)
+                    Text(subtitle)
+                        .pinkAndCozyTextModifier(fontSize: 16)
+                        .opacity(0.7)
+                    Spacer()
+                }
             }
         }
-        .padding(.vertical, 8)
+        .padding()
+        .background(ColorTheme.white.color)
+        .padding(2)
+        .background(ColorTheme.pink.color)
     }
 }

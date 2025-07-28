@@ -20,8 +20,8 @@ struct SettingsModel: Codable {
 
 
 enum DeletingType: String, CaseIterable, Codable {
-    case days7 = "days7"
-    case days30 = "days30"
-    case days60 = "days60"
+    case days7 = "7 days"
+    case days30 = "30 days"
+    case days60 = "60 days"
     case never = "never"
 }

@@ -18,6 +18,7 @@ class SettingsViewModel: ObservableObject {
     @Published var selectedEmotion: EmotionModel? = nil
     @Published var isPlayRecord: Bool = false
     @Published var selectedRecord: RecordDataModel? = nil
+    @Published var showDeleteButton: Bool = false
 
     // MARK: - Сервисы
     let audioInputOutputService = AudioInputOutputService()
@@ -168,6 +169,30 @@ class SettingsViewModel: ObservableObject {
                 EmotionModel(isShown: true, name: "Sad3", iconName: "house.fill", color: .red),
                 EmotionModel(isShown: true, name: "Sad4", iconName: "house.fill", color: .cyan)
             ]
+        }
+    }
+    
+    func toggleDeleteButton(){
+        withAnimation{
+            showDeleteButton = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 4) {[weak self] in
+                withAnimation {
+                    self?.showDeleteButton = false
+                }
+            }
+        }
+    }
+    
+    func changeDeletingType() {
+        switch delete {
+        case .days7:
+            delete = .days30
+        case .days30:
+            delete = .days60
+        case .days60:
+            delete = .never
+        case .never:
+            delete = .days7
         }
     }
 }

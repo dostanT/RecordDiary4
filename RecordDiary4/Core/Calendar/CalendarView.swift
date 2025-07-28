@@ -207,7 +207,7 @@ extension CalendarView {
                         DayCellView(
                             calendarDate: calendarDate,
                             records: calendarVM.getPointFromRecords(data: settingsVM.data, selectedDate: calendarDate.date),
-                            isSelected: Calendar.current.isDate(calendarDate.date, inSameDayAs: selectedDate),
+                            isSelected: Calendar.current.isDate(calendarDate.date, inSameDayAs: selectedDate), dotsAreVisible: settingsVM.pointInCalendarVisable,
                         )
                         .onTapGesture {
                             if selectedDate == calendarDate.date {

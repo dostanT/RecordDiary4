@@ -9,7 +9,7 @@ struct DayCellView: View {
     let calendarDate: CalendarDate
     let records: [RecordDataModel]
     let isSelected: Bool
-//    let settingsManager: SettingsManager
+    let dotsAreVisible: Bool
     
     var body: some View {
         VStack(spacing: 4) {
@@ -18,12 +18,14 @@ struct DayCellView: View {
                 .pinkAndCozyTextModifier(fontSize: 20)
             
             // record indicators
-            if !records.isEmpty {
-                HStack(spacing: 2) {
-                    ForEach(records.prefix(3), id: \.id) { record in
-                        Circle()
-                            .fill(record.emotion?.color.color ?? Color.gray)
-                            .frame(width: 6, height: 6)
+            if dotsAreVisible{
+                if !records.isEmpty {
+                    HStack(spacing: 2) {
+                        ForEach(records.prefix(3), id: \.id) { record in
+                            Circle()
+                                .fill(record.emotion?.color.color ?? Color.gray)
+                                .frame(width: 6, height: 6)
+                        }
                     }
                 }
             }
