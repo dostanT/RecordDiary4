@@ -102,7 +102,7 @@ struct SettingsView: View {
                             Text("Show")
                                 .pinkBorderedAndCozyTextModifier(fontSize: 16) {
                                     router.showScreen { router in
-                                        Text("Deleted Entries")
+                                        RecentDeletedView()
                                     }
                                 }
                             

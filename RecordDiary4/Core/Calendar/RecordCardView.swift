@@ -38,38 +38,6 @@ struct RecordCardView: View {
                 .padding(2)
                 
                 if calendarVM.selectedRecord == record {
-//                    VStack{
-//                        //Slider
-//                        Button {
-//                            if let selectedRecord = settingsVM.selectedRecord {
-//                                if selectedRecord.url == record.url {
-//                                    settingsVM.audioInputOutputService.stopPlayback()
-//                                    settingsVM.selectedRecord = nil
-//                                } else {
-//                                    settingsVM.changeAudioPlaying(chosenRecord: record)
-//                                }
-//                            }
-//                            else {
-//                                settingsVM.audioInputOutputService.playRecording(url: record.url) { success in
-//                                    if success {
-//                                        settingsVM.selectedRecord = record
-//                                    }
-//                                }
-//                            }
-//                        } label: {
-//                            if let selectedRecord = settingsVM.selectedRecord  {
-//                                Image(systemName: selectedRecord.url == record.url ? "stop.fill" : "play.fill")
-//                            } else {
-//                                Image(systemName: "play.fill")
-//                            }
-//                            
-//                        }
-//                        .font(.title2)
-//                        .foregroundStyle(record.emotion?.color.color ?? Color(#colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)))
-//                        .padding(2)
-//                        .transition(.move(edge: .top))
-//                        
-//                    }
                     VStack{
                         if let selectedRecord = settingsVM.selectedRecord  {
                             Image(systemName: selectedRecord.url == record.url ? "stop.fill" : "play.fill")
