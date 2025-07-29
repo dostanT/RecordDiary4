@@ -15,42 +15,45 @@ struct RecentDeletedView: View {
     
     @EnvironmentObject private var settingsVM: SettingsViewModel
     @EnvironmentObject var calendarVM: CalendarViewModel
-    @State private var isEditing: Bool = false
-    @State private var selectedData: [RecordDataModel] = []
-    
-    @State private var selectedRecord: RecordDataModel?
+    @StateObject private var recentDeletedVM: RecentDeletedViewModel = RecentDeletedViewModel()
+    @Binding var selectedDate: Date
     
     var body: some View {
         ZStack{
             ScrollView{
                 ForEach(settingsVM.recentDeleted) { record in
-                    RecordDeletedCardView(record: record, isEditing: $isEditing, selectedRecord: $selectedRecord, selectedData: $selectedData)
+                    RecordDeletedCardView(record: record, isEditing: $recentDeletedVM.isEditing, selectedRecord: $recentDeletedVM.selectedRecord, selectedData: $recentDeletedVM.selectedData)
                 }
             }
             .listStyle(PlainListStyle())
         }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                if isEditing {
+                if recentDeletedVM.isEditing {
                     HStack{
                         Text("Restore")
                             .pinkBorderedAndCozyTextModifier(fontSize: 16) {
-                                isEditing = false
+                                settingsVM.recentDeleted = recentDeletedVM.restoreSelected(restoreData: settingsVM.recentDeleted, function: {
+                                    settingsVM.sortData(fromExistToDelete: false)
+                                    settingsVM.sortData(fromExistToDelete: true)
+                                    calendarVM.filterRecordsWithEmotion(records: settingsVM.data, emotion: nil, shownDate: selectedDate, inMouth: true)
+                                })
                             }
                         Text("Delete")
                             .pinkBorderedAndCozyTextModifier(fontSize: 16) {
-                                isEditing = false
+                                settingsVM.recentDeleted = recentDeletedVM.deleteSlected(restoreData: settingsVM.recentDeleted, audioService: settingsVM.audioInputOutputService)
+                                
                             }
                         Text("Cancel")
                             .pinkBorderedAndCozyTextModifier(fontSize: 16) {
-                                isEditing = false
-                                selectedData = []
+                                recentDeletedVM.isEditing = false
+                                recentDeletedVM.selectedData = []
                             }
                     }
                 } else {
                     Text("Select")
                         .pinkBorderedAndCozyTextModifier(fontSize: 16) {
-                            isEditing = true
+                            recentDeletedVM.isEditing = true
                         }
                 }
             }

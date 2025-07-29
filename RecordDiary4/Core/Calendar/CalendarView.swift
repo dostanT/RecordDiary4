@@ -46,7 +46,7 @@ struct CalendarView: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button{
                         router.showScreen { router in
-                            SettingsView()
+                            SettingsView(selectedDate: $selectedDate)
                         }
                     } label: {
                         Image(systemName: "gear")

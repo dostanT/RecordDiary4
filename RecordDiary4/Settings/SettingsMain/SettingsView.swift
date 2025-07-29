@@ -13,6 +13,7 @@ struct SettingsView: View {
     @EnvironmentObject private var settingsVM: SettingsViewModel
     @EnvironmentObject var calendarVM: CalendarViewModel
     @State private var selectedSettingsForShowDescription: String? = nil
+    @Binding var selectedDate: Date
     
     
     var body: some View {
@@ -102,7 +103,7 @@ struct SettingsView: View {
                             Text("Show")
                                 .pinkBorderedAndCozyTextModifier(fontSize: 16) {
                                     router.showScreen { router in
-                                        RecentDeletedView()
+                                        RecentDeletedView(selectedDate: $selectedDate)
                                     }
                                 }
                             
