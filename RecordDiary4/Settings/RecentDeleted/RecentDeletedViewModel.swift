@@ -21,6 +21,7 @@ class RecentDeletedViewModel: ObservableObject {
                 audioService.deleteRecording(url: record.url)
             }
         }
+        selectedData = []
         isEditing = false
         return recentDeletedData
     }
@@ -36,10 +37,10 @@ class RecentDeletedViewModel: ObservableObject {
                 recentDeletedData.append(record)
             }
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             function()
         }
-        
+        selectedData = []
         isEditing = false
         return recentDeletedData
     }

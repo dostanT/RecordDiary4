@@ -44,14 +44,50 @@ struct CalendarView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button{
-                        router.showScreen { router in
-                            SettingsView(selectedDate: $selectedDate)
+                    if calendarVM.isEdit {
+                        HStack{
+                            Text("Delete")
+                                .pinkBorderedAndCozyTextModifier(fontSize: 16) {
+                                    settingsVM.data = calendarVM.deleteRecords(records: settingsVM.data) {
+                                        print("Start settingsVM.sortData(fromExistToDelete: false)")
+                                        print(settingsVM.data)
+                                        settingsVM.sortData(fromExistToDelete: false)
+                                    }function2: {
+                                        print("Start settingsVM.sortData(fromExistToDelete: true)")
+                                        print(settingsVM.data)
+                                        settingsVM.sortData(fromExistToDelete: true)
+                                    } function3: {
+                                        print("Start calendarVM.filterRecordsWithEmotion(records: settingsVM.data, emotion: selectedEmotion, shownDate: selectedDate, inMouth: showCalendar)")
+                                        print(settingsVM.data)
+                                        calendarVM.filterRecordsWithEmotion(records: settingsVM.data, emotion: selectedEmotion, shownDate: selectedDate, inMouth: showCalendar)
+                                        print("END")
+                                        print(calendarVM.shownRecordsAfterFiltering)
+                                    }
+                                }
+                            Text("Cancel")
+                                .pinkBorderedAndCozyTextModifier(fontSize: 16) {
+                                    calendarVM.isEdit = false
+                                    calendarVM.selectedData = []
+                                }
                         }
-                    } label: {
-                        Image(systemName: "gear")
+                    } else {
+                        HStack{
+                            Text("Select")
+                                .pinkBorderedAndCozyTextModifier(fontSize: 16) {
+                                    calendarVM.isEdit = true
+                                }
+                            
+                            Button{
+                                router.showScreen { router in
+                                    SettingsView(selectedDate: $selectedDate)
+                                }
+                            } label: {
+                                Image(systemName: "gear")
+                            }
+                            .font(.headline)
+                        }
+                        
                     }
-                    .font(.headline)
                 }
             }
             .onReceive(NotificationCenter.default.publisher(for: .playbackFinished)) { _ in
@@ -176,7 +212,7 @@ extension CalendarView {
     private var recordsListView: some View {
         ScrollView{
             ForEach(calendarVM.shownRecordsAfterFiltering) { record in
-                RecordCardView(record: record)
+                RecordCardView(record: record, isEditing: $calendarVM.isEdit, selectedData: $calendarVM.selectedData)
             }
         }
         .listStyle(PlainListStyle())

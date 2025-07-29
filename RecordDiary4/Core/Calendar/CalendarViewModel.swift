@@ -13,10 +13,39 @@ class CalendarViewModel: ObservableObject {
     @Published var shownRecordsAfterFiltering: [RecordDataModel] = []
     @Published var selectedRecord: RecordDataModel? = nil
     
+    @Published var selectedData: [RecordDataModel] = []
+    @Published var isEdit: Bool = false
+    @Published var selectedRecordInEditing: RecordDataModel?
+    
+    func deleteRecords(records: [RecordDataModel], function: @escaping () -> (),function2: @escaping () -> (),function3: @escaping () -> ()) -> [RecordDataModel]{
+        var newArr: [RecordDataModel] = records
+        for item in selectedData {
+            if let index = newArr.firstIndex(where: { $0.id == item.id }) {
+                newArr[index].itemIsDeleted = true
+                newArr[index].deletedDay = Date()
+            }
+        }
+        DispatchQueue.main.async {
+            function()
+            function2()
+            function3()
+        }
+        print(newArr)
+        selectedData = []
+        isEdit = false
+        return newArr
+    }
+    
     func filterRecordsWithEmotion(records: [RecordDataModel], emotion: EmotionModel?, shownDate: Date, inMouth: Bool) {
         var newArr: [RecordDataModel] = []
-        
+        print(records.count)
         guard let emotion = emotion else {
+            
+            if records.count == 0 {
+                shownRecordsAfterFiltering = []
+                return
+            }
+            
             for record in records {
                 if let shownDayRec = record.shownDay {
                     if !inMouth {
@@ -31,11 +60,17 @@ class CalendarViewModel: ObservableObject {
                 }
                 shownRecordsAfterFiltering = newArr
             }
+            
             return
         }
         for record in records {
             guard let recordEmotion = record.emotion else {
                 print("❌Error Filtering: filterRecordsWithEmotion()")
+                shownRecordsAfterFiltering = []
+                return
+            }
+            
+            if records.count == 0 {
                 shownRecordsAfterFiltering = []
                 return
             }
