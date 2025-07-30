@@ -44,4 +44,50 @@ class RecentDeletedViewModel: ObservableObject {
         isEditing = false
         return recentDeletedData
     }
+    
+    func deleteAllItemsWhichAreEnspired(restoreData: [RecordDataModel], audioService: AudioInputOutputService, deletingType: DeletingType) -> [RecordDataModel]{
+        var newData: [RecordDataModel] = []
+        print("deleteAllItemsWhichAreEnspired()")
+        var deletingInt: Int {
+            switch deletingType {
+            case .days7:
+                7
+            case .days30:
+                30
+            case .days60:
+                60
+            case .never:
+                -1
+            }
+        }
+        if deletingInt == -1 {
+            return restoreData
+        }
+        for record in restoreData {
+            if let deletedDate = record.deletedDay {
+                if daysBetween(deletedDate, Date()) > deletingInt  {
+                    audioService.deleteRecording(url: record.url)
+                    print("Deleted in deleteAllItemsWhichAreEnspired()")
+                } else {
+                    newData.append(record)
+                    print("Appended in deleteAllItemsWhichAreEnspired()")
+                }
+            }
+            else {
+                newData.append(record)
+                print("Appended in deleteAllItemsWhichAreEnspired()")
+            }
+            
+        }
+        return newData
+    }
+    
+    func daysBetween(_ from: Date, _ to: Date) -> Int {
+        let calendar = Calendar.current
+        let startOfFrom = calendar.startOfDay(for: from)
+        let startOfTo = calendar.startOfDay(for: to)
+        let components = calendar.dateComponents([.day], from: startOfFrom, to: startOfTo)
+        return components.day ?? 0
+    }
+
 }

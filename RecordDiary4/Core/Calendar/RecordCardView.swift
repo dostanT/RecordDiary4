@@ -50,6 +50,10 @@ struct RecordCardView: View {
                         Spacer()
                         
                         VStack{
+                            Button("CHeck"){
+                                settingsVM.data[0].deletedDay =  Calendar.current.date(byAdding: .day, value: -40, to: Date())!
+                                settingsVM.data[0].itemIsDeleted = true
+                            }
                             DurationTextView(record: record)
                         }
                     }

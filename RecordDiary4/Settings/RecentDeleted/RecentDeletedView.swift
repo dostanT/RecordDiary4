@@ -27,6 +27,9 @@ struct RecentDeletedView: View {
             }
             .listStyle(PlainListStyle())
         }
+        .onAppear{
+            settingsVM.recentDeleted = recentDeletedVM.deleteAllItemsWhichAreEnspired(restoreData: settingsVM.recentDeleted, audioService: settingsVM.audioInputOutputService, deletingType: settingsVM.delete)
+        }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 if recentDeletedVM.isEditing {

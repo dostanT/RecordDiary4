@@ -231,6 +231,12 @@ class AudioInputOutputService: NSObject, ObservableObject, AVAudioRecorderDelega
     
     @MainActor
     func getDurationString(from url: URL) async -> String? {
+        let fileManager = FileManager.default
+        guard fileManager.fileExists(atPath: url.path) else {
+            print("Файл не найден: \(url.path)")
+            return nil
+        }
+
         let asset = AVAsset(url: url)
 
         do {
@@ -258,7 +264,6 @@ class AudioInputOutputService: NSObject, ObservableObject, AVAudioRecorderDelega
             return nil
         }
     }
-
 }
 
 extension Notification.Name {
