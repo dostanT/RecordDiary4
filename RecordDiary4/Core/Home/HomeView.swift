@@ -54,7 +54,16 @@ struct HomeView: View {
                                 emotion2NONOptional: emotion) {
                                     settingsVM.stopRecording(showDate: selectedDate)
                                 } startRecording: {
-                                    settingsVM.startRecording(selectedEmotion: emotion)
+                                    if let permissonIsAvialable = settingsVM.audioInputOutputService.checkMicrophonePermission(){
+                                        if permissonIsAvialable {
+                                            settingsVM.startRecording(selectedEmotion: emotion)
+                                        } else {
+                                            showAlertRouter()
+                                        }
+                                    } else {
+                                        showAlertRouter()
+                                    }
+                                    
                                 }
                         })
                             .opacity(settingsVM.selectedEmotion == nil ? 1 : settingsVM.selectedEmotion!.id == emotion.id ? 1 : 0.2)
@@ -65,5 +74,20 @@ struct HomeView: View {
             
         }
         .preferredColorScheme(settingsVM.apearanceIsLight ? .light : .dark)
+    }
+    
+    func showAlertRouter() {
+        router.showAlert(.alert, title: "Warning", subtitle: "To use the app to its full potential, please allow access to the microphone 😊") {
+             Button("Settings") {
+                 if let appSettings = URL(string: UIApplication.openSettingsURLString) {
+                     UIApplication.shared.open(appSettings)
+                 }
+             }
+             .foregroundStyle(.blue)
+             Button("Cancel") {
+                 router.dismissAlert()
+             }
+             .foregroundStyle(.red)
+        }
     }
 }

@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftfulRouting
+import AVFoundation
 
 @main
 struct RecordDiaryApp: App {

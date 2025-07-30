@@ -110,9 +110,22 @@ class SettingsViewModel: ObservableObject {
     }
 
     func deleteAll() {
-        audioInputOutputService.deleteAllRecordings(data: data)
+        audioInputOutputService.stopPlayback()
+        
+        selectedRecord = nil
+        
+        for record in data {
+            if FileManager.default.fileExists(atPath: record.url.path) {
+                audioInputOutputService.deleteRecording(url: record.url)
+            }
+        }
+        
         coreDataService.deleteAllRecordsFromCoreData()
-        data = []
+        
+        DispatchQueue.main.async {
+            self.data = []
+            self.recentDeleted = []
+        }
     }
 
     // MARK: - Сохранение/Загрузка настроек
