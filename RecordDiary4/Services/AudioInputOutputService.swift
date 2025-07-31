@@ -265,32 +265,40 @@ class AudioInputOutputService: NSObject, ObservableObject, AVAudioRecorderDelega
         }
     }
 
-    func checkMicrophonePermission() -> Bool?{
+    func checkMicrophonePermission(completion: @escaping (Bool) -> Void) {
         if #available(iOS 17.0, *) {
             switch AVAudioApplication.shared.recordPermission {
             case .granted:
-                return true
+                completion(true)
             case .denied:
-                return false
+                completion(false)
             case .undetermined:
-                return nil
+                AVAudioApplication.requestRecordPermission { granted in
+                    DispatchQueue.main.async {
+                        completion(granted)
+                    }
+                }
             @unknown default:
-                break
+                completion(false)
             }
         } else {
             switch AVAudioSession.sharedInstance().recordPermission {
             case .granted:
-                return true
+                completion(true)
             case .denied:
-                return nil
+                completion(false)
             case .undetermined:
-               return nil
+                AVAudioSession.sharedInstance().requestRecordPermission { granted in
+                    DispatchQueue.main.async {
+                        completion(granted)
+                    }
+                }
             @unknown default:
-                break
+                completion(false)
             }
         }
-        return nil
     }
+
 }
 
 extension Notification.Name {

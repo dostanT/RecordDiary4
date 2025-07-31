@@ -54,14 +54,13 @@ struct HomeView: View {
                                 emotion2NONOptional: emotion) {
                                     settingsVM.stopRecording(showDate: selectedDate)
                                 } startRecording: {
-                                    if let permissonIsAvialable = settingsVM.audioInputOutputService.checkMicrophonePermission(){
-                                        if permissonIsAvialable {
+                                    settingsVM.audioInputOutputService.checkMicrophonePermission { granted in
+                                        if granted {
                                             settingsVM.startRecording(selectedEmotion: emotion)
+                                            
                                         } else {
                                             showAlertRouter()
                                         }
-                                    } else {
-                                        showAlertRouter()
                                     }
                                     
                                 }
