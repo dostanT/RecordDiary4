@@ -75,13 +75,21 @@ struct EmotionCardView: View {
                             Image(systemName: imageName)
                                 .font(.title3)
                                 .foregroundStyle(ColorTheme.pink.color)
+                                .onTapGesture {
+                                    print("Emoji")
+                                }
                         }
                         TextField("Emotion name", text: $emotionModel.name)
                             .pinkAndCozyTextModifier(fontSize: 28)
+                            .background(.gray)
+                            .onTapGesture {
+                                print("Text")
+                            }
                         Spacer()
                     }
                 }
                 .padding()
+                
                 
                 Spacer()
                 
@@ -94,6 +102,9 @@ struct EmotionCardView: View {
                     }
                 }
                 .padding()
+                .onTapGesture {
+                    print("Microphone")
+                }
             }
             .background(ColorTheme.white.color)
             .padding(3)
@@ -104,5 +115,8 @@ struct EmotionCardView: View {
             emotionModel.color.color
                 .shadow(color: emotionModel.color.color, radius: 2, x: 5, y: 5)
         )
+        .onTapGesture {
+            print("Color")
+        }
     }
 }
