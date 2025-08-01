@@ -15,8 +15,7 @@ struct HomeView: View {
     @State private var selectedDate: Date = Date()
     
     let columns: [GridItem] = [
-        GridItem(.flexible(), spacing: 12, alignment: .trailing),
-        GridItem(.flexible(), spacing: 12, alignment: .leading),
+        GridItem(.flexible(), spacing: 12, alignment: .center),
     ]
     
     

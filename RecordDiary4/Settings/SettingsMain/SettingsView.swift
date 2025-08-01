@@ -60,7 +60,7 @@ struct SettingsView: View {
                             Text("Edit")
                                 .pinkBorderedAndCozyTextModifier(fontSize: 16) {
                                     router.showScreen { router in
-                                        Text("Customize")
+                                        EmotionControllerView(emotionInediting: settingsVM.emotionInUse)
                                     }
                                 }
                             

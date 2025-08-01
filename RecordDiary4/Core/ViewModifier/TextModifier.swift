@@ -144,16 +144,16 @@ struct CustomBorderedAndCozyImageTextButtonModifier: ViewModifier {
             .foregroundStyle(color)
             .padding(6)
             .background(ColorTheme.white.color)
-            .offset(x: isDetectingLongPress ? 5 : 0, y: isDetectingLongPress ? 5 : 0)
+            .offset(x: isDetectingLongPress ? 3 : 0, y: isDetectingLongPress ? 3 : 0)
             .padding(3)
             .background(
                 color
-                    .offset(x: isDetectingLongPress ? 5 : 0, y: isDetectingLongPress ? 5 : 0)
+                    .offset(x: isDetectingLongPress ? 3 : 0, y: isDetectingLongPress ? 3 : 0)
             )
             .background(
                 color
                     .opacity(isDetectingLongPress ? 0 : 1)
-                    .shadow(color: color, radius: 2, x: 5, y: 5)
+                    .shadow(color: color, radius: 2, x: 3, y: 3)
             )
             .gesture(pressGesture)
     }
