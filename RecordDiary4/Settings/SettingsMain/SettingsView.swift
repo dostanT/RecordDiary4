@@ -79,6 +79,20 @@ struct SettingsView: View {
                             
                         },
                         selectedSettingsForShowDescription: $selectedSettingsForShowDescription)
+                    
+                    SettingsRow(
+                        icon: "iphone.radiowaves.left.and.right",
+                        title: "Haptic Feedback",
+                        subtitle: "Enable or disable vibration feedback for button interactions.",
+                        content: {
+                            Text(settingsVM.haptics ? "ON" : "OFF")
+                                .pinkBorderedAndCozyTextModifier(fontSize: 16) {
+                                    settingsVM.haptics.toggle()
+                                }
+                        },
+                        selectedSettingsForShowDescription: $selectedSettingsForShowDescription
+                    )
+
 
                     SettingsRow(
                         icon: "globe",

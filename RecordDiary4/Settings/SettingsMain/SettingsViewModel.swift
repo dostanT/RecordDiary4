@@ -12,6 +12,7 @@ class SettingsViewModel: ObservableObject {
     @Published var disableRecentDeleted: Bool = false
     @Published var delete: DeletingType = .days7
     @Published var emotionInUse: [EmotionModel] = []
+    @Published var haptics: Bool = true
 
     // MARK: - Вспомогательные флаги
     @Published var isRecording: Bool = false
@@ -55,11 +56,12 @@ class SettingsViewModel: ObservableObject {
         print("Start setupAutoSave()")
         Publishers.CombineLatest3(
             $isPremium.combineLatest($apearanceIsLight, $pointInCalendarVisable),
-            $language.combineLatest($emotionInUse),
+            $language.combineLatest($emotionInUse, $haptics),
             $disableRecentDeleted.combineLatest($delete)
         )
         .sink { [weak self] _, _, _ in
             self?.saveSettings()
+            self?.hapticsControllerManager()
         }
         .store(in: &cancellables)
     }
@@ -137,6 +139,7 @@ class SettingsViewModel: ObservableObject {
         disableRecentDeleted = model.disableRecentDeleted
         delete = model.delete
         emotionInUse = model.emotionInUse
+        haptics = model.haptics
     }
 
     func currentSettingsModel(completion: @escaping (SettingsModel) -> Void) {
@@ -148,7 +151,8 @@ class SettingsViewModel: ObservableObject {
                 language: self.language,
                 disableRecentDeleted: self.disableRecentDeleted,
                 delete: self.delete,
-                emotionInUse: self.emotionInUse
+                emotionInUse: self.emotionInUse,
+                haptics: self.haptics
             )
             completion(model)
         }
@@ -167,6 +171,7 @@ class SettingsViewModel: ObservableObject {
             print("❌ disableRecentDeleted (Отключить недавно удалённые): \(self.disableRecentDeleted.description)")
             print("⏳ delete (Политика удаления): \(self.delete.rawValue)")
             print("😊 emotionInUse (Эмоции в использовании): \(self.emotionInUse)")
+            print("📳 haptics (Вибрация): \(self.haptics)")
         }
     }
 
@@ -174,13 +179,14 @@ class SettingsViewModel: ObservableObject {
     func loadSettings() {
         if let loaded = SettingsStorageService.shared.load() {
             applySettings(from: loaded)
+            hapticsControllerManager()
         } else {
             // дефолтные эмоции
             emotionInUse = [
-                EmotionModel(isShown: true, name: "Sad1", iconName: "house.fill", color: .blue),
-                EmotionModel(isShown: true, name: "Sad2", iconName: "house.fill", color: .green),
-                EmotionModel(isShown: true, name: "Sad3", iconName: "house.fill", color: .red),
-                EmotionModel(isShown: true, name: "Sad4", iconName: "house.fill", color: .cyan)
+                EmotionModel(isShown: true, name: "Sad", iconName: "house.fill", color: .blue),
+                EmotionModel(isShown: true, name: "Fun", iconName: "house.fill", color: .green),
+                EmotionModel(isShown: true, name: "Angry", iconName: "house.fill", color: .red),
+                EmotionModel(isShown: true, name: "New", iconName: "house.fill", color: .cyan)
             ]
         }
     }
@@ -236,5 +242,9 @@ class SettingsViewModel: ObservableObject {
             }
         }
         data = newData
+    }
+    
+    func hapticsControllerManager() {
+        HapticService.instance.isAvialable = haptics
     }
 }

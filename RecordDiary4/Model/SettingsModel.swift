@@ -15,6 +15,7 @@ struct SettingsModel: Codable {
     var disableRecentDeleted: Bool
     var delete: DeletingType
     var emotionInUse: [EmotionModel]
+    var haptics: Bool
 }
 
 

@@ -12,16 +12,26 @@ struct PinkBorderedAndCozyTextModifier: ViewModifier {
     @GestureState private var isDetectingLongPress = false
     let onTap: () -> Void
     let fontSize: CGFloat
+    
+    @State private var didTriggerStartHaptic = false
 
     func body(content: Content) -> some View {
         let pressGesture = DragGesture(minimumDistance: 0)
             .updating($isDetectingLongPress) { _, state, _ in
                 state = true
             }
-            .onEnded { _ in
-                onTap()
+            .onChanged { _ in
+                if !didTriggerStartHaptic {
+                    HapticService.instance.light()
+                    didTriggerStartHaptic = true
+                }
             }
-        
+            .onEnded { _ in
+                HapticService.instance.light()
+                onTap()
+                didTriggerStartHaptic = false
+            }
+
         content
             .font(.custom("BebasNeue-Regular", size: fontSize))
             .foregroundStyle(ColorTheme.pink.color)
@@ -39,9 +49,10 @@ struct PinkBorderedAndCozyTextModifier: ViewModifier {
                     .opacity(isDetectingLongPress ? 0 : 1)
                     .shadow(color: ColorTheme.pink.color, radius: 2, x: 5, y: 5)
             )
-            .gesture(pressGesture)
+            .simultaneousGesture(pressGesture) // чтобы State работал правильно
     }
 }
+
 
 struct PinkBorderedAndCozyTextModifierLongPress: ViewModifier {
     
@@ -49,18 +60,29 @@ struct PinkBorderedAndCozyTextModifierLongPress: ViewModifier {
     let onTap: () -> Void
     let onLongPress: () -> Void
     let fontSize: CGFloat
+    
+    @State private var didTriggerStartHaptic = false
 
     func body(content: Content) -> some View {
         let longPressGesture = LongPressGesture(minimumDuration: 0.4)
             .updating($isDetectingLongPress) { current, state, _ in
                 state = current
             }
+            .onChanged { _ in
+                if !didTriggerStartHaptic {
+                    HapticService.instance.light()
+                    didTriggerStartHaptic = true
+                }
+            }
             .onEnded { _ in
+                HapticService.instance.light()
                 onLongPress()
+                didTriggerStartHaptic = false
             }
         
         let tapGesture = TapGesture()
             .onEnded {
+                HapticService.instance.light()
                 onTap()
             }
 
@@ -92,14 +114,24 @@ struct PinkBorderedAndCozyImageTextButtonModifier: ViewModifier {
     @GestureState private var isDetectingLongPress = false
     let onTap: () -> Void
     let fontSize: CGFloat
+    
+    @State private var didTriggerStartHaptic = false
 
     func body(content: Content) -> some View {
         let pressGesture = DragGesture(minimumDistance: 0)
             .updating($isDetectingLongPress) { _, state, _ in
                 state = true
             }
+            .onChanged { _ in
+                if !didTriggerStartHaptic {
+                    HapticService.instance.light()
+                    didTriggerStartHaptic = true
+                }
+            }
             .onEnded { _ in
+                HapticService.instance.light()
                 onTap()
+                didTriggerStartHaptic = false
             }
         
         content
@@ -129,14 +161,24 @@ struct CustomBorderedAndCozyImageTextButtonModifier: ViewModifier {
     let onTap: () -> Void
     let fontSize: CGFloat
     let color: Color
+    
+    @State private var didTriggerStartHaptic = false
 
     func body(content: Content) -> some View {
         let pressGesture = DragGesture(minimumDistance: 0)
             .updating($isDetectingLongPress) { _, state, _ in
                 state = true
             }
+            .onChanged { _ in
+                if !didTriggerStartHaptic {
+                    HapticService.instance.light()
+                    didTriggerStartHaptic = true
+                }
+            }
             .onEnded { _ in
+                HapticService.instance.light()
                 onTap()
+                didTriggerStartHaptic = false
             }
         
         content

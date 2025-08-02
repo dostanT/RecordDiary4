@@ -10,6 +10,8 @@ class HapticService {
     
     static let instance = HapticService() // Singleton
     
+    var isAvialable: Bool = true
+    
     func notification(type: UINotificationFeedbackGenerator.FeedbackType) {
         let generator = UINotificationFeedbackGenerator()
         generator.notificationOccurred(type)
@@ -21,7 +23,9 @@ class HapticService {
     }
     
     func light() {
-        impact(style: .light)
+        if !isAvialable{
+            impact(style: .light)
+        }
     }
     
 }

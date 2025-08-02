@@ -52,13 +52,23 @@ struct RecordingEmotionView: View {
     let isPremium: Bool
     let onTap: () -> Void
     
+    @State private var didTriggerStartHaptic = false
+    
     var body: some View {
         let pressGesture = DragGesture(minimumDistance: 0)
             .updating($isDetectingLongPress) { _, state, _ in
                 state = true
             }
+            .onChanged { _ in
+                if !didTriggerStartHaptic {
+                    HapticService.instance.light()
+                    didTriggerStartHaptic = true
+                }
+            }
             .onEnded { _ in
+                HapticService.instance.light()
                 onTap()
+                didTriggerStartHaptic = false
             }
         
         ZStack {
