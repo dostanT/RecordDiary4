@@ -21,7 +21,7 @@ struct RecentDeletedView: View {
     var body: some View {
         ZStack{
             ScrollView{
-                ForEach(settingsVM.recentDeleted.sorted(by: {$0.deletedDay! > $1.deletedDay!})) { record in
+                ForEach(settingsVM.recentDeleted) { record in
                     RecordDeletedCardView(record: record, isEditing: $recentDeletedVM.isEditing, selectedRecord: $recentDeletedVM.selectedRecord, selectedData: $recentDeletedVM.selectedData)
                 }
             }
