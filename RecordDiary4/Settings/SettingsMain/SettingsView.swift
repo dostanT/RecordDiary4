@@ -95,20 +95,20 @@ struct SettingsView: View {
                     )
 
 
-                    SettingsRow(
-                        icon: "globe",
-                        title: "Select App Language",
-                        subtitle: "Change the app’s language independently from your system settings.",
-                        content: {
-                            Text(settingsVM.language)
-                                .pinkBorderedAndCozyTextModifier(fontSize: 16) {
-                                    router.showScreen { router in
-                                        Text("Language")
-                                    }
-                                }
-                            
-                        },
-                        selectedSettingsForShowDescription: $selectedSettingsForShowDescription)
+//                    SettingsRow(
+//                        icon: "globe",
+//                        title: "Select App Language",
+//                        subtitle: "Change the app’s language independently from your system settings.",
+//                        content: {
+//                            Text(settingsVM.language)
+//                                .pinkBorderedAndCozyTextModifier(fontSize: 16) {
+//                                    router.showScreen { router in
+//                                        Text("Language")
+//                                    }
+//                                }
+//                            
+//                        },
+//                        selectedSettingsForShowDescription: $selectedSettingsForShowDescription)
 
                     SettingsRow(
                         icon: "trash",

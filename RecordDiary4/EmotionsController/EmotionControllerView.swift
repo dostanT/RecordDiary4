@@ -59,6 +59,7 @@ struct EmotionControllerView: View {
                             emotionControllerVM.checkEmotionItemsAreNotSimilar(emotions: emotionInediting) { checker in
                                 if checker {
                                     settingsVM.emotionInUse = emotionInediting
+                                    router.dismissScreen()
                                 } else {
                                     showAlertRouter()
                                 }

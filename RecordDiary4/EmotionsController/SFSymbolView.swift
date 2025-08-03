@@ -22,6 +22,15 @@ struct SFSymbolView: View {
             ForEach(names, id: \.self) { name in
                 SFSymbolCardView(name: name)
             }
+            HStack(alignment: .center){
+                Spacer()
+                Text("You can choose any icon from SF Symbols.")
+                    .pinkAndCozyTextModifier(fontSize: 16)
+            }
+            .padding()
+            .background(ColorTheme.white.color)
+            .padding(3)
+            .background(ColorTheme.pink.color)
         }
         .padding(.horizontal)
     }
