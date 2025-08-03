@@ -70,8 +70,11 @@ struct TextFieldUIKit: UIViewRepresentable {
         }
         
         func textFieldDidChangeSelection(_ textField: UITextField) {
-            text = textField.text ?? ""
+            DispatchQueue.main.async {
+                self.text = textField.text ?? ""
+            }
         }
+
         
     }
     

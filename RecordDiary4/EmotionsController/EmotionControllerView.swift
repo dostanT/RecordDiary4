@@ -14,6 +14,8 @@ struct EmotionControllerView: View {
     @StateObject private var emotionControllerVM = EmotionControllerViewModel()
     @EnvironmentObject private var settingsVM: SettingsViewModel
     
+    @State private var selectedEmotionForEditing: EmotionModel? = nil
+    
     @State var emotionInediting: [EmotionModel]
     
     let columns: [GridItem] = [
@@ -24,30 +26,45 @@ struct EmotionControllerView: View {
         ZStack{
             ColorTheme.white.color.ignoresSafeArea()
             
-            LazyVGrid(
-                columns: columns,
-                alignment: .center,
-                spacing: 12,
-                pinnedViews: [],
-                content: {
-                    ForEach(0..<emotionInediting.count, id: \.self){ index in
-                        EmotionCardView(emotionModel: $emotionInediting[index])
-                    }
-            })
-            .padding(.horizontal)
+            if let selectedEmotionForEditing = selectedEmotionForEditing {
+                EmotionCardView(emotionModel: $emotionInediting[emotionInediting.firstIndex(where: {$0.id == selectedEmotionForEditing.id}) ?? 0], selectedEmotionForEditing: $selectedEmotionForEditing)
+            } else {
+                LazyVGrid(
+                    columns: columns,
+                    alignment: .center,
+                    spacing: 12,
+                    pinnedViews: [],
+                    content: {
+                        ForEach(0..<emotionInediting.count, id: \.self){ index in
+                            EmotionCardView(emotionModel: $emotionInediting[index], selectedEmotionForEditing: $selectedEmotionForEditing)
+                        }
+                })
+            }
         }
+        .onTapGesture {
+            selectedEmotionForEditing = nil
+        }
+        .padding(.horizontal)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                Text("Save")
-                    .pinkBorderedAndCozyTextModifier(fontSize: 12, onTap: {
-                        emotionControllerVM.checkEmotionItemsAreNotSimilar(emotions: emotionInediting) { checker in
-                            if checker {
-                                settingsVM.emotionInUse = emotionInediting
-                            } else {
-                                showAlertRouter()
+                HStack{
+                    Text("SFSymbols")
+                        .pinkBorderedAndCozyTextModifier(fontSize: 16, onTap: {
+                            router.showScreen { router in
+                                SFSymbolView(names: emotionControllerVM.emotionSymbols)
                             }
-                        }
-                    })
+                        })
+                    Text("Save")
+                        .pinkBorderedAndCozyTextModifier(fontSize: 16, onTap: {
+                            emotionControllerVM.checkEmotionItemsAreNotSimilar(emotions: emotionInediting) { checker in
+                                if checker {
+                                    settingsVM.emotionInUse = emotionInediting
+                                } else {
+                                    showAlertRouter()
+                                }
+                            }
+                        })
+                }
             }
         }
     }
@@ -62,63 +79,4 @@ struct EmotionControllerView: View {
 
 }
 
-struct EmotionCardView: View {
-    
-    @Binding var emotionModel: EmotionModel
-    
-    var body: some View{
-        ZStack {
-            HStack {
-                HStack(alignment: .top) {
-                    VStack(alignment: .leading) {
-                        HStack{
-                            if let imageName = emotionModel.iconName,
-                               UIImage(systemName: imageName.lowercased()) != nil {
-                                
-                                Image(systemName: imageName.lowercased())
-                                    .font(.title3)
-                                    .foregroundStyle(ColorTheme.pink.color)
-                                
-                            } else {
-                                Image(systemName: "xmark")
-                                    .font(.title3)
-                                    .opacity(0.0001)
-                            }
-                            TextFieldUIKitOptional(text: $emotionModel.iconName , placeholder: "SFSymbol name", placeholderColor: UIColor(ColorTheme.pink.color), fontSize: 16)
-                        }
-                        TextFieldUIKit(text: $emotionModel.name, placeholder: "Emotion name", placeholderColor: UIColor(ColorTheme.pink.color))
-                        Spacer()
-                    }
-                }
-                .padding()
-                
-                
-                Spacer()
-                
-                HStack(alignment: .bottom) {
-                    VStack {
-                        Spacer()
-                        Image(systemName: "microphone.fill")
-                            .font(.title3)
-                            .foregroundStyle(ColorTheme.pink.color)
-                    }
-                }
-                .padding()
-                .onTapGesture {
-                    print("Microphone")
-                }
-            }
-            .background(ColorTheme.white.color)
-            .padding(3)
-            .background(emotionModel.color.color)
-        }
-        
-        .background(
-            emotionModel.color.color
-                .shadow(color: emotionModel.color.color, radius: 2, x: 5, y: 5)
-        )
-        .onTapGesture {
-            print("Color")
-        }
-    }
-}
+
