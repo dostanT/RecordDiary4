@@ -65,7 +65,9 @@ class CalendarViewModel: ObservableObject {
                         }
                     }
                 }
-                shownRecordsAfterFiltering = newArr
+                shownRecordsAfterFiltering = newArr.sorted(by: {
+                    $0.createdDate > $1.createdDate
+                })
             }
             
             return
@@ -90,7 +92,9 @@ class CalendarViewModel: ObservableObject {
                 }
             }
         }
-        shownRecordsAfterFiltering = newArr
+        shownRecordsAfterFiltering = newArr.sorted(by: {
+            $0.createdDate > $1.createdDate
+        })
         return
     }
     
