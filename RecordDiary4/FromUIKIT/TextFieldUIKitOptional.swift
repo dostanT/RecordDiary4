@@ -15,13 +15,15 @@ struct TextFieldUIKitOptional: UIViewRepresentable {
     let placeholderColor: UIColor
     var fontSize: CGFloat
     var fontName: String
+    var onSubmit: () -> Void
     
-    init(text: Binding<String?>, placeholder: String = "Default placeholder...", placeholderColor: UIColor = .red, fontSize: CGFloat = 28, fontName: String = "BebasNeue-Regular") {
+    init(text: Binding<String?>, placeholder: String = "Default placeholder...", placeholderColor: UIColor = .red, fontSize: CGFloat = 28, fontName: String = "BebasNeue-Regular", onSubmit: @escaping () -> Void = {}) {
         self._text = text
         self.placeholder = placeholder
         self.placeholderColor = placeholderColor
         self.fontSize = fontSize
         self.fontName = fontName
+        self.onSubmit = onSubmit
     }
     
     func makeUIView(context: Context) -> UITextField {
@@ -58,21 +60,28 @@ struct TextFieldUIKitOptional: UIViewRepresentable {
     
     // from UIKit to SwiftUI
     func makeCoordinator() -> Coordinator {
-        return Coordinator(text: $text)
+        return Coordinator(text: $text, onSubmit: onSubmit)
     }
     
     class Coordinator: NSObject, UITextFieldDelegate {
         
         @Binding var text: String?
+        var onSubmit: () -> Void
         
-        init(text: Binding<String?>) {
-            self._text = text
-        }
+        init(text: Binding<String?>, onSubmit: @escaping () -> Void) {
+                self._text = text
+                self.onSubmit = onSubmit
+            }
         
         func textFieldDidChangeSelection(_ textField: UITextField) {
             text = textField.text ?? ""
         }
         
+        func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+            textField.resignFirstResponder()
+            onSubmit()
+            return true
+        }
     }
     
 }

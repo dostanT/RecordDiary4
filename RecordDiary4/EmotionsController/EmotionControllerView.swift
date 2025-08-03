@@ -27,7 +27,7 @@ struct EmotionControllerView: View {
             ColorTheme.white.color.ignoresSafeArea()
             
             if let selectedEmotionForEditing = selectedEmotionForEditing {
-                EmotionCardView(emotionModel: $emotionInediting[emotionInediting.firstIndex(where: {$0.id == selectedEmotionForEditing.id}) ?? 0], selectedEmotionForEditing: $selectedEmotionForEditing)
+                EmotionCardEditView(emotionModel: $emotionInediting[emotionInediting.firstIndex(where: {$0.id == selectedEmotionForEditing.id}) ?? 0], selectedEmotionForEditing: $selectedEmotionForEditing)
             } else {
                 LazyVGrid(
                     columns: columns,

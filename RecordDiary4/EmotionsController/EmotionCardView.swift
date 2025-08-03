@@ -31,9 +31,11 @@ struct EmotionCardView: View {
                                     .font(.title3)
                                     .opacity(0.0001)
                             }
-                            TextFieldUIKitOptional(text: $emotionModel.iconName , placeholder: "SFSymbol name", placeholderColor: UIColor(ColorTheme.pink.color), fontSize: 16)
+                            Text(emotionModel.iconName ?? "SFSymbol name")
+                                .pinkAndCozyTextModifier(fontSize: 16)
                         }
-                        TextFieldUIKit(text: $emotionModel.name, placeholder: "Emotion name", placeholderColor: UIColor(ColorTheme.pink.color))
+                        Text(emotionModel.name)
+                            .pinkAndCozyTextModifier(fontSize: 28)
                         Spacer()
                     }
                 }
