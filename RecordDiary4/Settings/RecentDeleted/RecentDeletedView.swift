@@ -35,7 +35,7 @@ struct RecentDeletedView: View {
                 if recentDeletedVM.isEditing {
                     HStack{
                         Text(recentDeletedVM.selectedData.isEmpty ? "Restore All" :"Restore")
-                            .pinkBorderedAndCozyTextModifier(fontSize: 16) {
+                            .pinkBorderedAndCozyTextModifier(fontSize: 12) {
                                 settingsVM.recentDeleted = recentDeletedVM.restoreSelected(restoreData: settingsVM.recentDeleted, function: {
                                     settingsVM.sortData(fromExistToDelete: false)
                                     settingsVM.sortData(fromExistToDelete: true)
@@ -43,12 +43,12 @@ struct RecentDeletedView: View {
                                 })
                             }
                         Text(recentDeletedVM.selectedData.isEmpty ? "Delete All" : "Delete")
-                            .pinkBorderedAndCozyTextModifier(fontSize: 16) {
+                            .pinkBorderedAndCozyTextModifier(fontSize: 12) {
                                 settingsVM.recentDeleted = recentDeletedVM.deleteSlected(restoreData: settingsVM.recentDeleted, audioService: settingsVM.audioInputOutputService)
                                 
                             }
                         Text("Cancel")
-                            .pinkBorderedAndCozyTextModifier(fontSize: 16) {
+                            .pinkBorderedAndCozyTextModifier(fontSize: 12) {
                                 recentDeletedVM.isEditing = false
                                 recentDeletedVM.selectedData = []
                             }
