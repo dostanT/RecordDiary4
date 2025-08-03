@@ -34,7 +34,7 @@ struct RecentDeletedView: View {
             ToolbarItem(placement: .topBarTrailing) {
                 if recentDeletedVM.isEditing {
                     HStack{
-                        Text("Restore")
+                        Text(recentDeletedVM.selectedData.isEmpty ? "Restore All" :"Restore")
                             .pinkBorderedAndCozyTextModifier(fontSize: 16) {
                                 settingsVM.recentDeleted = recentDeletedVM.restoreSelected(restoreData: settingsVM.recentDeleted, function: {
                                     settingsVM.sortData(fromExistToDelete: false)
@@ -42,7 +42,7 @@ struct RecentDeletedView: View {
                                     calendarVM.filterRecordsWithEmotion(records: settingsVM.data, emotion: nil, shownDate: selectedDate, inMouth: true)
                                 })
                             }
-                        Text("Delete")
+                        Text(recentDeletedVM.selectedData.isEmpty ? "Delete All" : "Delete")
                             .pinkBorderedAndCozyTextModifier(fontSize: 16) {
                                 settingsVM.recentDeleted = recentDeletedVM.deleteSlected(restoreData: settingsVM.recentDeleted, audioService: settingsVM.audioInputOutputService)
                                 

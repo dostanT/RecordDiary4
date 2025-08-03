@@ -46,7 +46,7 @@ struct CalendarView: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     if calendarVM.isEdit {
                         HStack{
-                            Text("Delete")
+                            Text(calendarVM.selectedData.isEmpty ? "Delete All" : "Delete")
                                 .pinkBorderedAndCozyTextModifier(fontSize: 16) {
                                     settingsVM.data = calendarVM.deleteRecords(records: settingsVM.data) {
                                         print("Start settingsVM.sortData(fromExistToDelete: false)")

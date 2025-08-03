@@ -19,10 +19,17 @@ class CalendarViewModel: ObservableObject {
     
     func deleteRecords(records: [RecordDataModel], function: @escaping () -> (),function2: @escaping () -> (),function3: @escaping () -> ()) -> [RecordDataModel]{
         var newArr: [RecordDataModel] = records
-        for item in selectedData {
-            if let index = newArr.firstIndex(where: { $0.id == item.id }) {
+        if selectedData.isEmpty {
+            for index in 0..<newArr.count {
                 newArr[index].itemIsDeleted = true
                 newArr[index].deletedDay = Date()
+            }
+        } else {
+            for item in selectedData {
+                if let index = newArr.firstIndex(where: { $0.id == item.id }) {
+                    newArr[index].itemIsDeleted = true
+                    newArr[index].deletedDay = Date()
+                }
             }
         }
         DispatchQueue.main.async {

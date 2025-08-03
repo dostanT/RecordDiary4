@@ -14,11 +14,17 @@ class RecentDeletedViewModel: ObservableObject {
     
     func deleteSlected(restoreData: [RecordDataModel], audioService: AudioInputOutputService) -> [RecordDataModel] {
         var recentDeletedData: [RecordDataModel] = []
-        for record in selectedData {
-            if !restoreData.contains(record) {
-                recentDeletedData.append(record)
-            } else {
+        if selectedData.isEmpty{
+            for record in restoreData {
                 audioService.deleteRecording(url: record.url)
+            }
+        } else {
+            for record in selectedData {
+                if !restoreData.contains(record) {
+                    recentDeletedData.append(record)
+                } else {
+                    audioService.deleteRecording(url: record.url)
+                }
             }
         }
         selectedData = []
@@ -27,14 +33,23 @@ class RecentDeletedViewModel: ObservableObject {
     }
     func restoreSelected(restoreData: [RecordDataModel], function: @escaping () -> Void) -> [RecordDataModel] {
         var recentDeletedData: [RecordDataModel] = []
-        for record in selectedData {
-            if restoreData.contains(record) {
+        if selectedData.isEmpty{
+            for record in restoreData {
                 var uRecord = record
                 uRecord.itemIsDeleted = false
                 uRecord.deletedDay = nil
                 recentDeletedData.append(uRecord)
-            } else{
-                recentDeletedData.append(record)
+            }
+        } else {
+            for record in selectedData {
+                if restoreData.contains(record) {
+                    var uRecord = record
+                    uRecord.itemIsDeleted = false
+                    uRecord.deletedDay = nil
+                    recentDeletedData.append(uRecord)
+                } else{
+                    recentDeletedData.append(record)
+                }
             }
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
