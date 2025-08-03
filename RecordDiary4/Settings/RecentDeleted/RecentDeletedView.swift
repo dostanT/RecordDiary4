@@ -154,6 +154,6 @@ struct RecordDeletedCardView: View {
                 }
             }
         }
-        .padding()
+        .padding(.horizontal)
     }
 }

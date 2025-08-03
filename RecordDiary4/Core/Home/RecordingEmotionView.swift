@@ -6,45 +6,6 @@
 //
 import SwiftUI
 
-struct RecordingEmotionViewOldVersion: View {
-    
-    let emotionModel: EmotionModel
-    let isPremium: Bool
-    let onTap: () -> Void
-    
-    var body: some View {        
-        ZStack{
-            HStack{
-                HStack(alignment: .top){
-                    VStack(alignment: .leading){
-                        if let imageName = emotionModel.iconName {
-                            Image(systemName: imageName)
-                                .font(.title3)
-                        }
-                        Text(emotionModel.name)
-                            .pinkAndCozyTextModifier(fontSize: 28)
-                        Spacer()
-                    }
-                }
-                .padding()
-                Spacer()
-                HStack(alignment: .bottom){
-                    VStack{
-                        Spacer()
-                        Image(systemName: "microphone.fill")
-                            .font(.title3)
-                    }
-                }
-                .padding()
-            }
-            .background(ColorTheme.white.color)
-        }
-        .padding(3)
-        .background(emotionModel.color.color)
-    }
-}
-
-
 struct RecordingEmotionView: View {
     
     @GestureState private var isDetectingLongPress = false
@@ -75,10 +36,13 @@ struct RecordingEmotionView: View {
             HStack {
                 HStack(alignment: .top) {
                     VStack(alignment: .leading) {
-                        if let imageName = emotionModel.iconName {
-                            Image(systemName: imageName)
+                        if let imageName = emotionModel.iconName,
+                           UIImage(systemName: imageName.lowercased()) != nil {
+                            
+                            Image(systemName: imageName.lowercased())
                                 .font(.title3)
                                 .foregroundStyle(ColorTheme.pink.color)
+                            
                         }
                         Text(emotionModel.name)
                             .pinkAndCozyTextModifier(fontSize: 28)

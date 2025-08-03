@@ -71,20 +71,22 @@ struct EmotionCardView: View {
             HStack {
                 HStack(alignment: .top) {
                     VStack(alignment: .leading) {
-                        if let imageName = emotionModel.iconName {
-                            Image(systemName: imageName)
-                                .font(.title3)
-                                .foregroundStyle(ColorTheme.pink.color)
-                                .onTapGesture {
-                                    print("Emoji")
-                                }
-                        }
-                        TextField("Emotion name", text: $emotionModel.name)
-                            .pinkAndCozyTextModifier(fontSize: 28)
-                            .background(.gray)
-                            .onTapGesture {
-                                print("Text")
+                        HStack{
+                            if let imageName = emotionModel.iconName,
+                               UIImage(systemName: imageName.lowercased()) != nil {
+                                
+                                Image(systemName: imageName.lowercased())
+                                    .font(.title3)
+                                    .foregroundStyle(ColorTheme.pink.color)
+                                
+                            } else {
+                                Image(systemName: "xmark")
+                                    .font(.title3)
+                                    .opacity(0.0001)
                             }
+                            TextFieldUIKitOptional(text: $emotionModel.iconName , placeholder: "SFSymbol name", placeholderColor: UIColor(ColorTheme.pink.color), fontSize: 16)
+                        }
+                        TextFieldUIKit(text: $emotionModel.name, placeholder: "Emotion name", placeholderColor: UIColor(ColorTheme.pink.color))
                         Spacer()
                     }
                 }
