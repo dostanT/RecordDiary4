@@ -35,6 +35,7 @@ class SettingsViewModel: ObservableObject {
         data = audioInputOutputService.giveEmotionsForRecordsWithoutEmotions(recordsLocal: data)
         addCoreDataSubscriber()
         setupAutoSave()
+        hapticsControllerManager()
     }
 
     // MARK: - CoreData Подписка
@@ -61,7 +62,6 @@ class SettingsViewModel: ObservableObject {
         )
         .sink { [weak self] _, _, _ in
             self?.saveSettings()
-            self?.hapticsControllerManager()
         }
         .store(in: &cancellables)
     }
@@ -179,7 +179,7 @@ class SettingsViewModel: ObservableObject {
     func loadSettings() {
         if let loaded = SettingsStorageService.shared.load() {
             applySettings(from: loaded)
-            hapticsControllerManager()
+            
         } else {
             // дефолтные эмоции
             emotionInUse = [

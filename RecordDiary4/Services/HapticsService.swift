@@ -6,11 +6,11 @@
 //
 import SwiftUI
 
-class HapticService {
+class HapticService: ObservableObject {
     
     static let instance = HapticService() // Singleton
     
-    var isAvialable: Bool = true
+    @Published var isAvialable: Bool = true
     
     func notification(type: UINotificationFeedbackGenerator.FeedbackType) {
         let generator = UINotificationFeedbackGenerator()
@@ -23,7 +23,7 @@ class HapticService {
     }
     
     func light() {
-        if !isAvialable{
+        if isAvialable{
             impact(style: .light)
         }
     }

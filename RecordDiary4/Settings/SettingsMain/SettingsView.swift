@@ -88,6 +88,7 @@ struct SettingsView: View {
                             Text(settingsVM.haptics ? "ON" : "OFF")
                                 .pinkBorderedAndCozyTextModifier(fontSize: 16) {
                                     settingsVM.haptics.toggle()
+                                    settingsVM.hapticsControllerManager()
                                 }
                         },
                         selectedSettingsForShowDescription: $selectedSettingsForShowDescription
