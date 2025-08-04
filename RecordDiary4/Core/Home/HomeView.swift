@@ -71,6 +71,12 @@ struct HomeView: View {
             
             
         }
+        .overlay{
+            if !settingsVM.isLoggedIn {
+                LaunchScreenView(isLoggedIn: $settingsVM.isLoggedIn)
+                    .transition(.move(edge: .top))
+            }
+        }
         .preferredColorScheme(settingsVM.apearanceIsLight ? .light : .dark)
     }
     

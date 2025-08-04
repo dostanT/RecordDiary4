@@ -20,6 +20,7 @@ class SettingsViewModel: ObservableObject {
     @Published var isPlayRecord: Bool = false
     @Published var selectedRecord: RecordDataModel? = nil
     @Published var showDeleteButton: Bool = false
+    @Published var isLoggedIn: Bool = false
 
     // MARK: - Сервисы
     let audioInputOutputService = AudioInputOutputService()
