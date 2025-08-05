@@ -17,7 +17,8 @@ struct RecordDiaryApp: App {
     var body: some Scene {
         WindowGroup {
             RouterView { router in
-                HomeView()
+//                HomeView()
+                HorizontalScrollViewWithPages()
             }
             .environmentObject(settingsVM)
             .environmentObject(calendatVM)

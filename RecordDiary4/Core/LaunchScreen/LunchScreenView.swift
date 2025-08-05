@@ -5,7 +5,7 @@ struct LaunchScreenView: View {
     @State private var countOfCycle: Int = 0
     @Binding var isLoggedIn: Bool
     
-    let timer = Timer.publish(every: 0.2, on: .main, in: .common).autoconnect()
+    let timer = Timer.publish(every: 0.15, on: .main, in: .common).autoconnect()
     let name = Array("Teddy’s Diary")
     
     var body: some View {
@@ -28,7 +28,7 @@ struct LaunchScreenView: View {
         }
         .onReceive(timer) { _ in
             print("On loop")
-            withAnimation(.spring(duration: 0.2)) {
+            withAnimation(.spring(duration: 0.15)) {
                 selectedIndex = (selectedIndex + 1) % name.count
             }
             withAnimation(.spring(duration: 0.7)) {
